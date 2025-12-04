@@ -6,7 +6,10 @@ namespace Web_Browser_CW1
     public partial class WebBrowser : Form {
 
         HTTPClient httpClient;
+
+        BookmarkHandler bookmarkHandler;
         HistoryHandler historyHandler;
+        StateHandler stateHandler;
 
         public WebBrowser() {
 
@@ -14,11 +17,13 @@ namespace Web_Browser_CW1
 
             httpClient = new HTTPClient(progressBar);
 
+            bookmarkHandler = new BookmarkHandler();
             historyHandler = new HistoryHandler(
                 historyToolStripMenuItem,
                 previousPage,
                 nextPage
             );
+            stateHandler = new StateHandler();
 
             progressBar.Hide();
 
