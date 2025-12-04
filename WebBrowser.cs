@@ -6,12 +6,19 @@ namespace Web_Browser_CW1
     public partial class WebBrowser : Form {
 
         HTTPClient httpClient;
+        HistoryHandler historyHandler;
 
         public WebBrowser() {
 
             InitializeComponent();
 
             httpClient = new HTTPClient(progressBar);
+
+            historyHandler = new HistoryHandler(
+                historyToolStripMenuItem,
+                previousPage,
+                nextPage
+            );
 
             progressBar.Hide();
 

@@ -88,15 +88,18 @@
             // 
             // nextPage
             // 
+            nextPage.BackColor = SystemColors.ControlLightLight;
             nextPage.BackgroundImage = Properties.Resources.arrow_right;
             nextPage.BackgroundImageLayout = ImageLayout.Stretch;
+            nextPage.Enabled = false;
             nextPage.Location = new Point(91, 1);
             nextPage.Margin = new Padding(4);
             nextPage.Name = "nextPage";
             nextPage.Size = new Size(34, 34);
             nextPage.TabIndex = 10;
             toolTips.SetToolTip(nextPage, "Next Page (Right Arrow)");
-            nextPage.UseVisualStyleBackColor = true;
+            nextPage.UseVisualStyleBackColor = false;
+            nextPage.Visible = false;
             nextPage.Click += NextClick;
             // 
             // favourite
@@ -113,15 +116,19 @@
             // 
             // previousPage
             // 
+            previousPage.BackColor = SystemColors.ControlLightLight;
             previousPage.BackgroundImage = Properties.Resources.arrow_left;
             previousPage.BackgroundImageLayout = ImageLayout.Stretch;
+            previousPage.Enabled = false;
+            previousPage.ForeColor = SystemColors.ControlText;
             previousPage.Location = new Point(50, 1);
             previousPage.Margin = new Padding(4);
             previousPage.Name = "previousPage";
             previousPage.Size = new Size(34, 34);
             previousPage.TabIndex = 9;
             toolTips.SetToolTip(previousPage, "Previous Page (Right Arrow)");
-            previousPage.UseVisualStyleBackColor = true;
+            previousPage.UseVisualStyleBackColor = false;
+            previousPage.Visible = false;
             previousPage.Click += PrevClick;
             // 
             // home

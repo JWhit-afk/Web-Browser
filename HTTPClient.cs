@@ -62,7 +62,7 @@ namespace Web_Browser_CW1 {
 
                 // Get favicon
                 Bitmap faviconBitmap = new Bitmap(await client.GetStreamAsync(url + "/favicon.ico"));
-                nint handle = faviconBitmap.GetHicon();
+                System.IntPtr handle = faviconBitmap.GetHicon();
                 Icon favicon = Icon.FromHandle(handle);
 
                 return new HttpResponse(title, favicon, responseBody, statusCode);
