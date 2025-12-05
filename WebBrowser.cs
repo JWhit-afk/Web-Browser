@@ -47,6 +47,5 @@ namespace Web_Browser_CW1
         private void WebBrowserWindow_Load(object sender, EventArgs e) {
 
         }
-
     }
 }

@@ -4,6 +4,9 @@
     <Compile Update="Events\ClickHandlers.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Events\KeyDownHandlers.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="WebBrowser.cs">
       <SubType>Form</SubType>
     </Compile>

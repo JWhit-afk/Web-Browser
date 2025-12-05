@@ -142,6 +142,7 @@
             home.TabIndex = 8;
             toolTips.SetToolTip(home, "Home (Ctrl+H)");
             home.UseVisualStyleBackColor = true;
+            home.Click += HomeClick;
             // 
             // searchButton
             // 
@@ -255,7 +256,7 @@
             // 
             changeHomepageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { enterNewHomepageToolStripMenuItem, newHomepageText });
             changeHomepageToolStripMenuItem.Name = "changeHomepageToolStripMenuItem";
-            changeHomepageToolStripMenuItem.Size = new Size(268, 34);
+            changeHomepageToolStripMenuItem.Size = new Size(270, 34);
             changeHomepageToolStripMenuItem.Text = "Change Homepage";
             // 
             // enterNewHomepageToolStripMenuItem
@@ -268,6 +269,7 @@
             // 
             newHomepageText.Name = "newHomepageText";
             newHomepageText.Size = new Size(100, 31);
+            newHomepageText.KeyDown += NewHomePageEnter;
             // 
             // attributesToolStripMenuItem
             // 
