@@ -25,7 +25,8 @@ namespace Web_Browser_CW1
             );
             stateHandler = new StateHandler();
 
-            progressBar.Hide();
+            // Visit the home page on startup.
+            HomeClick(this, EventArgs.Empty);
 
         }
 

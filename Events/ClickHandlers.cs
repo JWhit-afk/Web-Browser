@@ -17,6 +17,8 @@ namespace Web_Browser_CW1 {
             urlBar.Text = stateHandler.homePageUrl;
             RenderHtmlCode(await httpClient.Get(urlBar.Text));
             historyHandler.visit(urlBar.Text);
+
+            progressBar.Hide();
         }
 
         private void PrevClick(object sender, EventArgs e) { urlBar.Text = historyHandler.previousPage(); }
