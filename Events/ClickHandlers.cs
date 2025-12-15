@@ -13,32 +13,22 @@ namespace Web_Browser_CW1 {
         //
         // Button Handlers
         //
-        private async void HomeClick(object sender, EventArgs e) {
-            urlBar.Text = stateHandler.homePageUrl;
-            RenderHtmlCode(await httpClient.Get(urlBar.Text));
+        private async void HomeClick(object sender, EventArgs e) { 
+            requestHandler.LoadPage(stateHandler.homePageUrl);
+            historyHandler.visit(stateHandler.homePageUrl);
+        }
+
+        private async void PrevClick(object sender, EventArgs e) { 
+            requestHandler.LoadPage(historyHandler.previousPage()); 
+        }
+
+        private async void NextClick(object sender, EventArgs e) { 
+            requestHandler.LoadPage(historyHandler.nextPage()); 
+        }
+
+        private async void SearchClick(object sender, EventArgs e) { 
+            requestHandler.LoadPage(urlBar.Text); 
             historyHandler.visit(urlBar.Text);
-            progressBar.Hide();
-        }
-
-        private async void PrevClick(object sender, EventArgs e) {
-            progressBar.Show();
-            urlBar.Text = historyHandler.previousPage();
-            RenderHtmlCode(await httpClient.Get(urlBar.Text));
-            progressBar.Hide();
-        }
-
-        private async void NextClick(object sender, EventArgs e) {
-            progressBar.Show();
-            urlBar.Text = historyHandler.nextPage();
-            RenderHtmlCode(await httpClient.Get(urlBar.Text));
-            progressBar.Hide();
-        }
-
-        private async void SearchClick(object sender, EventArgs e) {
-            progressBar.Show();
-            RenderHtmlCode(await httpClient.Get(urlBar.Text));
-            historyHandler.visit(urlBar.Text);
-            progressBar.Hide();
         }
     }
 }

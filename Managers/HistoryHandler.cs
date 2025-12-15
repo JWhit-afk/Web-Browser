@@ -1,44 +1,66 @@
 ﻿
+using System.Reflection;
+using Web_Browser_CW1.Managers;
+
 namespace Web_Browser_CW1.Handlers {
 
     internal class HistoryHandler {
 
         ToolStripMenuItem historyStip;
+        RequestHandler requestHandler;
         Button prevButton;
         Button nextButton;
 
-        // Slinky approach
-        private Stack<string> history = new Stack<string>();
-        private Stack<string> navigate = new Stack<string>();
+        private List<string> history = new List<string>();
+        private int pointer = -1; 
 
-        public HistoryHandler(ToolStripMenuItem historyStip, Button prevButton, Button nextButton) { 
+        public HistoryHandler
+            (
+            ToolStripMenuItem historyStip, 
+            Button prevButton, 
+            Button nextButton,
+            RequestHandler requestHandler
+            ) { 
             this.historyStip = historyStip;
             this.prevButton = prevButton;
             this.nextButton = nextButton;
+            this.requestHandler = requestHandler;
         }
 
         public void visit(string url) { 
 
-            history.Push(url);
+            history.Add(url);
+            pointer++;
 
             if (!prevButton.Enabled && history.Count > 1) {
                 prevButton.Enabled = true;
                 prevButton.Visible = true;
             }
 
+            if (nextButton.Enabled) {
+                nextButton.Enabled = false;
+                nextButton.Visible = false;
+            }
+
             // Always display the 10 most recent sites visitied.
             historyStip.DropDownItems.Clear();
             foreach (var item in updateHistory()) {
-                historyStip.DropDownItems.Add(item);
+                var urlItem = new ToolStripMenuItem(item);
+
+                urlItem.Click += (sender, e) => {
+                    visit(item);
+                    requestHandler.LoadPage(item);
+                };
+
+                historyStip.DropDownItems.Add(urlItem);
             }
         }
 
         public string previousPage () {
 
-            // Add the page to navigation stack to use the next page button.
-            navigate.Push(history.Pop());
+            pointer--;
 
-            if (history.Count == 1) {
+            if (pointer == 0) {
                 // Reached back of history -> hide back button
                 prevButton.Enabled = false;
                 prevButton.Visible = false;
@@ -50,15 +72,14 @@ namespace Web_Browser_CW1.Handlers {
                 nextButton.Visible = true;
             }
 
-            return history.Peek();
+            return history[pointer];
         }
 
         public string nextPage() {
 
-            // Add the page back to history.
-            history.Push(navigate.Pop());
+            pointer++;
 
-            if (navigate.Count == 0) {
+            if (pointer == history.Count - 1) {
                 // Reached front of history -> hide next button.
                 nextButton.Enabled = false;
                 nextButton.Visible = false;
@@ -70,7 +91,7 @@ namespace Web_Browser_CW1.Handlers {
                 prevButton.Visible = true;
             }
 
-            return history.Peek();
+            return history[pointer];
         }
 
         public List<string> updateHistory() {
@@ -81,13 +102,7 @@ namespace Web_Browser_CW1.Handlers {
             foreach (var item in history) {
                 if (count > 10) return items;
                 count++;
-                items.Add(item);
-            }
-
-            foreach (var item in navigate) {
-                if (count > 10) return items;
-                count++;
-                items.Add(item);
+                items.Insert(0, item);
             }
 
             return items;
