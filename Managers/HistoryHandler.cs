@@ -38,7 +38,7 @@ namespace Web_Browser_CW1.Handlers {
             // Add the page to navigation stack to use the next page button.
             navigate.Push(history.Pop());
 
-            if (history.Count == 0) {
+            if (history.Count == 1) {
                 // Reached back of history -> hide back button
                 prevButton.Enabled = false;
                 prevButton.Visible = false;
@@ -50,7 +50,7 @@ namespace Web_Browser_CW1.Handlers {
                 nextButton.Visible = true;
             }
 
-            return navigate.Peek();
+            return history.Peek();
         }
 
         public string nextPage() {

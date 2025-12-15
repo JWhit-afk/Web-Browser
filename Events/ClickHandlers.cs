@@ -17,17 +17,28 @@ namespace Web_Browser_CW1 {
             urlBar.Text = stateHandler.homePageUrl;
             RenderHtmlCode(await httpClient.Get(urlBar.Text));
             historyHandler.visit(urlBar.Text);
-
             progressBar.Hide();
         }
 
-        private void PrevClick(object sender, EventArgs e) { urlBar.Text = historyHandler.previousPage(); }
+        private async void PrevClick(object sender, EventArgs e) {
+            progressBar.Show();
+            urlBar.Text = historyHandler.previousPage();
+            RenderHtmlCode(await httpClient.Get(urlBar.Text));
+            progressBar.Hide();
+        }
 
-        private void NextClick(object sender, EventArgs e) { urlBar.Text = historyHandler.nextPage(); }
+        private async void NextClick(object sender, EventArgs e) {
+            progressBar.Show();
+            urlBar.Text = historyHandler.nextPage();
+            RenderHtmlCode(await httpClient.Get(urlBar.Text));
+            progressBar.Hide();
+        }
 
         private async void SearchClick(object sender, EventArgs e) {
+            progressBar.Show();
             RenderHtmlCode(await httpClient.Get(urlBar.Text));
             historyHandler.visit(urlBar.Text);
+            progressBar.Hide();
         }
     }
 }
