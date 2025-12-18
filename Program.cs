@@ -1,5 +1,11 @@
 namespace Web_Browser_CW1
 {
+
+    // Application constants.
+    public static class AppConstants {
+        public const string DataFilePath = "C:/Users/Jacob/Desktop/data";
+    }
+
     internal static class Program
     {
         /// <summary>
@@ -8,6 +14,9 @@ namespace Web_Browser_CW1
         [STAThread]
         static void Main()
         {
+            // Ensure data directory exists.
+            Directory.CreateDirectory(AppConstants.DataFilePath);
+
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();

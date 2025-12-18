@@ -1,10 +1,12 @@
-﻿
-using System.Reflection;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using Web_Browser_CW1.Managers;
 
 namespace Web_Browser_CW1.Handlers {
 
     internal class HistoryHandler {
+
+        private const string HistoryFilePath = AppConstants.DataFilePath + "/history.json";
 
         ToolStripMenuItem historyStip;
         RequestHandler requestHandler;
@@ -12,22 +14,22 @@ namespace Web_Browser_CW1.Handlers {
         Button nextButton;
 
         private List<string> history = new List<string>();
-        private int pointer = -1; 
+        private int pointer = -1;
 
         public HistoryHandler
             (
-            ToolStripMenuItem historyStip, 
-            Button prevButton, 
+            ToolStripMenuItem historyStip,
+            Button prevButton,
             Button nextButton,
             RequestHandler requestHandler
-            ) { 
+            ) {
             this.historyStip = historyStip;
             this.prevButton = prevButton;
             this.nextButton = nextButton;
             this.requestHandler = requestHandler;
         }
 
-        public void visit(string url) { 
+        public void visit(string url) {
 
             history.Add(url);
             pointer++;
@@ -44,7 +46,8 @@ namespace Web_Browser_CW1.Handlers {
 
             // Always display the 10 most recent sites visitied.
             historyStip.DropDownItems.Clear();
-            foreach (var item in updateHistory()) {
+            for (int i = 0; i < history.Count; i++) {
+                var item = history[history.Count - 1 - i];
                 var urlItem = new ToolStripMenuItem(item);
 
                 urlItem.Click += (sender, e) => {
@@ -56,7 +59,7 @@ namespace Web_Browser_CW1.Handlers {
             }
         }
 
-        public string previousPage () {
+        public string previousPage() {
 
             pointer--;
 
@@ -94,18 +97,31 @@ namespace Web_Browser_CW1.Handlers {
             return history[pointer];
         }
 
-        public List<string> updateHistory() {
+        public void LoadHistory() {
 
-            int count = 0;
-            List<string> items = new List<string>();
+            try {
+                string json = File.ReadAllText(HistoryFilePath);
 
-            foreach (var item in history) {
-                if (count > 10) return items;
-                count++;
-                items.Insert(0, item);
+                if (json == "") return;
+                List<string>? previousHistory = JsonSerializer.Deserialize<List<string>>(json);
+
+                if (previousHistory != null) history = previousHistory;
+
+            } catch (FileNotFoundException) {
+                
+                File.Create(HistoryFilePath).Close();
             }
 
-            return items;
+        }
+
+        public void SaveHistory() {
+
+            Debug.WriteLine("Saving History...");
+            string json = JsonSerializer.Serialize<List<string>>(history);
+            File.WriteAllText(HistoryFilePath, json);
+            Debug.WriteLine("State Saved:");
+            Debug.WriteLine(json);
+
         }
     }
 }
