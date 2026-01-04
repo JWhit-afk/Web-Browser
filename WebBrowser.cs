@@ -1,5 +1,4 @@
 using Web_Browser_CW1.Handlers;
-using Web_Browser_CW1.Managers;
 
 namespace Web_Browser_CW1
 {
@@ -8,7 +7,8 @@ namespace Web_Browser_CW1
         BookmarkHandler bookmarkHandler;
         HistoryHandler historyHandler;
         StateHandler stateHandler;
-        RequestHandler requestHandler;
+
+        HTTPClient httpClient;
 
         public WebBrowser() {
 
@@ -16,13 +16,7 @@ namespace Web_Browser_CW1
 
             // Initialise handlers.
             bookmarkHandler = new BookmarkHandler();
-            requestHandler = new RequestHandler(
-               this,
-               urlBar,
-               htmlDisplay,
-               HtmlResponseCodeOutput,
-               progressBar
-           );
+            httpClient = new HTTPClient(progressBar);
             historyHandler = new HistoryHandler();
             stateHandler = new StateHandler();
 

@@ -44,10 +44,18 @@ namespace Web_Browser_CW1 {
                 var item = list[list.Count - 1 - i];
                 var urlItem = new ToolStripMenuItem(item);
 
-                urlItem.Click += (sender, e) => {
-                    historyHandler.visit(item);
-                    requestHandler.LoadPage(item);
+                urlItem.Click += async (sender, e) => {
+
+                    // Request page url.
+                    HttpResponse response = await httpClient.Get(stateHandler.homePageUrl);
+                    UpdateHTMLOutputs(response.body, response.statusCode.ToString(), response.title, response.favicon);
+
+                    // Log visit in history.
+                    historyHandler.visit(stateHandler.homePageUrl);
+
+                    // Update GUI elements.
                     UpdateHistroyDropDown();
+                    UpdateHistoryButtons();
                 };
 
                 historyToolStripMenuItem.DropDownItems.Add(urlItem);
@@ -62,6 +70,17 @@ namespace Web_Browser_CW1 {
         public void ToggleNextButton(bool enabled) {
             nextPage.Enabled = enabled;
             nextPage.Visible = enabled;
+        }
+
+
+        //
+        // HTML Output Methods
+        //
+        public void UpdateHTMLOutputs(string htmlText, string statusCode, string title, Icon? icon) {
+            htmlDisplay.Text = htmlText;
+            HtmlResponseCodeOutput.Text = statusCode;
+            this.Text = title;
+            if (icon != null) this.Icon = icon;
         }
     }
 }
