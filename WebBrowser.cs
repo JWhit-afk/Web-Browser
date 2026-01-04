@@ -23,12 +23,7 @@ namespace Web_Browser_CW1
                HtmlResponseCodeOutput,
                progressBar
            );
-            historyHandler = new HistoryHandler(
-                historyToolStripMenuItem,
-                previousPage,
-                nextPage,
-                requestHandler
-            );
+            historyHandler = new HistoryHandler();
             stateHandler = new StateHandler();
 
             // Load saved state and history from previous sessions.

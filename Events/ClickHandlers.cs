@@ -16,19 +16,25 @@ namespace Web_Browser_CW1 {
         private async void HomeClick(object sender, EventArgs e) { 
             requestHandler.LoadPage(stateHandler.homePageUrl);
             historyHandler.visit(stateHandler.homePageUrl);
+            UpdateHistroyDropDown();
+            UpdateHistoryButtons();
         }
 
         private async void PrevClick(object sender, EventArgs e) { 
-            requestHandler.LoadPage(historyHandler.previousPage()); 
+            requestHandler.LoadPage(historyHandler.previousPage());
+            UpdateHistoryButtons();
         }
 
         private async void NextClick(object sender, EventArgs e) { 
-            requestHandler.LoadPage(historyHandler.nextPage()); 
+            requestHandler.LoadPage(historyHandler.nextPage());
+            UpdateHistoryButtons();
         }
 
         private async void SearchClick(object sender, EventArgs e) { 
             requestHandler.LoadPage(urlBar.Text); 
             historyHandler.visit(urlBar.Text);
+            UpdateHistroyDropDown();
+            UpdateHistoryButtons();
         }
     }
 }
