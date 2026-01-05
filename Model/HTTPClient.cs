@@ -32,15 +32,11 @@ namespace Web_Browser_CW1 {
 
     internal class HTTPClient {
 
-        private ProgressBar loadIndicator;
-
         private static readonly HttpClient client = new HttpClient();
 
-        public HTTPClient(ProgressBar loadIndicator) { this.loadIndicator = loadIndicator; }
+        public HTTPClient() {}
 
         public async Task<HttpResponse> Get(string url) {
-
-            loadIndicator.Show();
 
             try {
 
@@ -72,9 +68,6 @@ namespace Web_Browser_CW1 {
                 Console.WriteLine(ex.Message);
                 return new HttpResponse("website", "Unknown error please try again later", 0);
             
-            } finally {
-
-                loadIndicator.Hide();
             }
         }
     }

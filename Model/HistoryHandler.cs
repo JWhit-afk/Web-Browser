@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using Web_Browser_CW1.Managers;
 
 namespace Web_Browser_CW1.Handlers {
 
@@ -19,11 +18,13 @@ namespace Web_Browser_CW1.Handlers {
         }
 
         public string previousPage() {
-            return history[pointer--];
+            pointer--;
+            return history[pointer];
         }
 
         public string nextPage() {
-            return history[pointer++];
+            pointer++;
+            return history[pointer];
         }
 
         public void LoadHistory() {

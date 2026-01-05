@@ -24,6 +24,12 @@ namespace Web_Browser_CW1.Handlers {
 
                 // File doesn't exist, create it.
                 File.Create(StateFilePath).Close();
+            
+            } catch (JsonException) {
+
+                // FIle does not contian json tokens or json is corrupted.
+                File.Delete(StateFilePath);
+                File.Create(StateFilePath).Close();
             }
         }
 

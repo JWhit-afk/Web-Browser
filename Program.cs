@@ -1,3 +1,5 @@
+using Web_Browser_CW1.Control;
+
 namespace Web_Browser_CW1
 {
 
@@ -20,7 +22,11 @@ namespace Web_Browser_CW1
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new WebBrowser());
+
+            var app = new WebBrowser();
+            var controller = new Controller(app);
+
+            Application.Run(app);
         }
     }
 }

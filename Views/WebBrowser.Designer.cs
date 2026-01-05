@@ -97,7 +97,7 @@
             toolTips.SetToolTip(nextPage, "Next Page (Right Arrow)");
             nextPage.UseVisualStyleBackColor = false;
             nextPage.Visible = false;
-            nextPage.Click += NextClick;
+            nextPage.Click += new System.EventHandler(this.ButtonNext_Click);
             // 
             // favourite
             // 
@@ -124,7 +124,7 @@
             toolTips.SetToolTip(previousPage, "Previous Page (Right Arrow)");
             previousPage.UseVisualStyleBackColor = false;
             previousPage.Visible = false;
-            previousPage.Click += PrevClick;
+            previousPage.Click += new System.EventHandler(this.ButtonPrev_Click);
             // 
             // home
             // 
@@ -136,7 +136,7 @@
             home.TabIndex = 8;
             toolTips.SetToolTip(home, "Home (Ctrl+H)");
             home.UseVisualStyleBackColor = true;
-            home.Click += HomeClick;
+            home.Click += new System.EventHandler(this.ButtonHome_Click);
             // 
             // searchButton
             // 
@@ -148,7 +148,7 @@
             searchButton.Text = "Search";
             toolTips.SetToolTip(searchButton, "Search (Enter)");
             searchButton.UseVisualStyleBackColor = true;
-            searchButton.Click += SearchClick;
+            searchButton.Click += new System.EventHandler(this.ButtonSearch_Click);
             // 
             // refresh
             // 
