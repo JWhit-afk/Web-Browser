@@ -12,7 +12,7 @@ namespace Web_Browser_CW1.Handlers {
 
         public HistoryHandler() { }
 
-        public void visit(string url) {
+        public void register(string url) {
             history.Add(url);
             pointer = history.Count - 1;
         }

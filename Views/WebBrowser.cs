@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
@@ -14,18 +15,18 @@ namespace Web_Browser_CW1
         private void WebBrowser_FormClosing(object sender, FormClosingEventArgs e) {
 
             // Save state and history for next session.
-
-            this.SaveState.Invoke(this, EventArgs.Empty);
+            this.StateRequest.Invoke(this, new StateArgs { request = StateArgs.Requests.homePageLoad });
         }
 
         #region IView Implementation
 
-        public event EventHandler HistoryPrevious;
-        public event EventHandler HistoryNext;
-        public event EventHandler HomepageUpdate;
-        public event EventHandler LoadPageURLBar;
-        public event EventHandler LoadHomepage;
-        public event EventHandler SaveState;
+        public event EventHandler HistoryPreviousClick;
+        public event EventHandler HistoryNextClick;
+        
+        public event EventHandler<UrlEvent> HistoryItemClicked;
+        public event EventHandler<UrlEvent> UrlChanged;
+        public event EventHandler<UrlEvent> HistoryUpdate;
+        public event EventHandler<StateArgs> StateRequest;
 
         public void UpdateHistoryDropDown(List<string> items) {
 
@@ -34,15 +35,13 @@ namespace Web_Browser_CW1
 
             // Build from newest to oldest
             for (int i = 0; i < items.Count; i++) {
+
+                // Generate object.
                 var item = items[items.Count - 1 - i];
                 var urlItem = new ToolStripMenuItem(item);
 
-                urlItem.Click += async (sender, e) => {
-
-                    // TODO: Load the selected URL
-                    this.urlBar.Text = item;
-                    this.LoadPageURLBar?.Invoke(this, e);
-                };
+                // Asign onclick event
+                urlItem.Click += new EventHandler(Dropdown_Click); ;
 
                 historyToolStripMenuItem.DropDownItems.Add(urlItem);
             }
@@ -111,26 +110,53 @@ namespace Web_Browser_CW1
         //
         private void ButtonHome_Click(object sender, EventArgs e) {
 
-            // Call the page load event to fetch  home url and refresh GUI
-            this.LoadHomepage?.Invoke(this, e);
+            // Call the state request event to fetch home and load into url bar.
+            this.StateRequest?.Invoke(this, new StateArgs { request = StateArgs.Requests.homePageLoad });
+
+            // Record visit to history.
+            this.HistoryUpdate?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+
+            // Notify subscribers URL changed to load page.
+            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
         }
 
         private void ButtonPrev_Click(object sender, EventArgs e) {
 
             // Call the history previous event to navigate back.
-            this.HistoryPrevious?.Invoke(this, e);
+            this.HistoryPreviousClick?.Invoke(this, e);
+
+            // Notify URL changed to load page.
+            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
         }
 
         private void ButtonNext_Click(object sender, EventArgs e) {
 
             // Call the history next event to navigate forward.
-            this.HistoryNext?.Invoke(this, e);
+            this.HistoryNextClick?.Invoke(this, e);
+
+            // Notify URL changed to load page.
+            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
         }
 
         private void ButtonSearch_Click(object sender, EventArgs e) {
 
-            // Call the page load event to fetch url and refresh GUI.
-            this.LoadPageURLBar?.Invoke(this, e);
+            // Update history with new url.
+            this.HistoryUpdate?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+
+            // Notify URL changed to load page.
+            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+        }
+
+        private void Dropdown_Click(object sender, EventArgs e) {
+
+            Debug.WriteLine($"Sender: {sender.GetType()}");
+
+            if (sender is ToolStripMenuItem) {
+
+                ToolStripMenuItem item = (ToolStripMenuItem) sender;
+
+                this.HistoryItemClicked?.Invoke(this, new UrlEvent { url = item.Text });
+            }
         }
 
         //
@@ -138,7 +164,18 @@ namespace Web_Browser_CW1
         //
         private void NewHomePageEnter(object sender, KeyEventArgs e) {
 
-            this.HomepageUpdate?.Invoke(this, e);
+            // ignore non-enter keys.
+            if (e.KeyCode != Keys.Enter) return;
+
+            // Request homepage change on state handler and pass homepage as arg.
+            this.StateRequest?.Invoke(this, 
+                new StateArgs {
+                    request = StateArgs.Requests.homePageSet, 
+                    homepage = this.newHomepageText.Text
+                }
+            );
+
+
         }
 
         #endregion

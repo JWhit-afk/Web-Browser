@@ -2,17 +2,35 @@
 
 namespace Web_Browser_CW1.Views {
 
+    public class UrlEvent : EventArgs {
+        public required string url;
+    }
+
+    public class StateArgs : EventArgs {
+
+        // Enum of possible requests to make to the state handler.
+        public enum Requests {
+            homePageLoad,
+            homePageSet,
+            save,
+            load
+        }
+
+        public string homepage = string.Empty; 
+
+        public required Requests request;
+    }
+
     internal interface IView {
 
-        event EventHandler LoadPageURLBar;
-        event EventHandler LoadHomepage;
+        event EventHandler<UrlEvent> UrlChanged;
+        event EventHandler<UrlEvent> HistoryUpdate;
+        event EventHandler<UrlEvent> HistoryItemClicked;
 
-        event EventHandler HistoryPrevious;
-        event EventHandler HistoryNext;
+        event EventHandler<StateArgs> StateRequest;
 
-        event EventHandler HomepageUpdate;
-
-        event EventHandler SaveState;
+        event EventHandler HistoryPreviousClick;
+        event EventHandler HistoryNextClick;
 
         #region HTML Outputs
         void UpdateHTMLOutput(string htmlContent);
@@ -29,7 +47,6 @@ namespace Web_Browser_CW1.Views {
         #endregion
 
         #region Inputs
-        string GetURLInput();
         void SetURLInput(string url);
         #endregion
 

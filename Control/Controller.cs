@@ -25,13 +25,13 @@ namespace Web_Browser_CW1.Control {
             stateHandler = new();
             httpClient = new();
 
-            // Assign events
-            this.view.LoadPageURLBar += View_LoadPageURLBar;
-
-            this.view.HistoryNext += View_HistoryNext;
-            this.view.HistoryPrevious += View_HistoryPrevious;
-            this.view.HomepageUpdate += View_HomepageUpdate;
-            this.view.SaveState += View_SaveState;
+            // Subscribe events
+            this.view.HistoryNextClick += View_HistoryNextClick;
+            this.view.HistoryPreviousClick += View_HistoryPreviousClick;
+            this.view.HistoryUpdate += View_HistoryUpdate;
+            this.view.HistoryItemClicked += View_HistoryItemClicked;
+            this.view.UrlChanged += View_UrlChanged;
+            this.view.StateRequest += View_StateRequest;
 
             // Load from save
             stateHandler.LoadState();
@@ -46,83 +46,110 @@ namespace Web_Browser_CW1.Control {
         private async void LoadPage(string url) {
 
             // Show progressbar
-            this.view.ToggleProgressIndicator(true);
+            view.ToggleProgressIndicator(true);
 
             // Load the url from the url bar text input.
             HttpResponse response = await httpClient.Get(url);
 
             // Update the HTML Outputs
-            this.view.UpdateHTMLOutput(response.body);
-            this.view.UpdateStatusCodeOutput(response.statusCode.ToString());
-            this.view.UpdateTitleOutput(response.title);
+            view.UpdateHTMLOutput(response.body);
+            view.UpdateStatusCodeOutput(response.statusCode.ToString());
+            view.UpdateTitleOutput(response.title);
 
-            if (response.favicon != null) this.view.UpdateFaviconOutput(response.favicon);
+            if (response.favicon != null) view.UpdateFaviconOutput(response.favicon);
 
             // Ensure forward and back buttons are correctly enabled/disabled.
-            this.view.RefreshHistoryButtons(historyHandler.GetHistory().Count, historyHandler.GetPosition());
+            view.RefreshHistoryButtons(historyHandler.GetHistory().Count, historyHandler.GetPosition());
 
             // Hide Progress indicator
-            this.view.ToggleProgressIndicator(false);
+            view.ToggleProgressIndicator(false);
         }
 
         #region URL and History Event Handlers
+        private void View_UrlChanged(object? sender, UrlEvent e) {
+            Debug.WriteLine($"URL changed to: {e.url} \t Loading...");
 
-        private void View_HomepageUpdate(object? sender, EventArgs e) {
-            throw new NotImplementedException();
+            // Load address into URL bar.
+            view.SetURLInput(e.url);
+
+            // Load the new URL.
+            LoadPage(e.url);
         }
 
-        private void View_HistoryPrevious(object? sender, EventArgs e) {
+        private void View_HistoryUpdate(object? sender, UrlEvent e) {
+            Debug.WriteLine($"History registerd URL: {e.url}");
+
+            historyHandler.register(e.url);
+
+            view.UpdateHistoryDropDown(historyHandler.GetHistory());
+        }
+
+        private void View_HistoryPreviousClick(object? sender, EventArgs e) {
 
             // Load previous address into URL bar.
-            this.view.SetURLInput(historyHandler.previousPage());
-
-            // Perfrom page load as normal.
-            LoadPage(this.view.GetURLInput());
+            view.SetURLInput(historyHandler.previousPage());
         }
 
-        private void View_HistoryNext(object? sender, EventArgs e) {
+        private void View_HistoryNextClick(object? sender, EventArgs e) {
 
             // Load next address into URL bar.
-            this.view.SetURLInput(historyHandler.nextPage());
-
-            // Perfrom page load as normal.
-            LoadPage(this.view.GetURLInput());
-        }
-
-        private async void View_LoadPageURLBar(object? sender, EventArgs e) {
-
-            // Load page from URL in url bar
-            LoadPage(this.view.GetURLInput());
-
-            // Log the visit in history
-            historyHandler.visit(this.view.GetURLInput());
-
-            // Update the history dropdowns as history log updated.
-            this.view.UpdateHistoryDropDown(historyHandler.GetHistory());
+            view.SetURLInput(historyHandler.nextPage());
         }
 
         private async void View_LoadPageHomepage(object? sender, EventArgs e) {
 
             // Load homepage into url bar
-            this.view.SetURLInput(stateHandler.homePageUrl);
+            view.SetURLInput(stateHandler.homePageUrl);
 
             // Load page as normal
             LoadPage(stateHandler.homePageUrl);
 
             // Log the visit in history
-            historyHandler.visit(stateHandler.homePageUrl);
+            historyHandler.register(stateHandler.homePageUrl);
 
             // Update the history dropdowns as history log updated.
-            this.view.UpdateHistoryDropDown(historyHandler.GetHistory());
+            view.UpdateHistoryDropDown(historyHandler.GetHistory());
+        }
+
+        private void View_HistoryItemClicked(object? sender, UrlEvent e) {
+            throw new NotImplementedException();
         }
 
         #endregion
 
-        #region State saving and loading events
+        #region State Requests.
 
-        private void View_SaveState(object? sender, EventArgs e) {
-            stateHandler.SaveState();
-            historyHandler.SaveHistory();
+        private void View_StateRequest(object? sender, StateArgs e) {
+
+            Debug.WriteLine($"State request id:{e.request}");
+
+            switch (e.request) {
+
+                case StateArgs.Requests.homePageLoad:
+                    Debug.WriteLine("Homepage Loaded");
+                    view.SetURLInput(stateHandler.homePageUrl);
+                    break;
+
+                case StateArgs.Requests.homePageSet:
+                    Debug.WriteLine($"Homepage set to: {e.homepage}");
+                    stateHandler.homePageUrl = e.homepage;
+                    break;
+
+                case StateArgs.Requests.save:
+                    Debug.WriteLine("Saving state");
+                    stateHandler.SaveState();
+                    historyHandler.SaveHistory();
+                    break;
+
+                case StateArgs.Requests.load:
+                    Debug.WriteLine("Loading state");
+                    stateHandler.LoadState();
+                    historyHandler.LoadHistory();
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         #endregion
