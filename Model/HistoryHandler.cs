@@ -64,5 +64,23 @@ namespace Web_Browser_CW1.Handlers {
         public int GetPosition() {
             return pointer;
         }
+
+        public int GetPosition(string url) {
+            return history.FindIndex((string u) => {
+                return u == url;
+            });
+        }
+
+        /// <summary>
+        /// Sets the position the history handler is pointing to
+        /// </summary>
+        /// <param name="position"></param>
+        /// <exception cref="Exception">Thrown when <paramref name="position"/> is out of bounds of history handler </exception>
+        public void SetPosition(int position) {
+            if (position > history.Count - 1 || position < 0) {
+                throw new Exception($"The requested position {position} is out of bounds {0}:{history.Count-1}");
+            }
+            pointer = position;
+        }
     }
 }

@@ -155,7 +155,7 @@ namespace Web_Browser_CW1
 
                 ToolStripMenuItem item = (ToolStripMenuItem) sender;
 
-                this.HistoryItemClicked?.Invoke(this, new UrlEvent { url = item.Text });
+                this.HistoryItemClicked?.Invoke(sender, new UrlEvent { url = item.Text });
             }
         }
 

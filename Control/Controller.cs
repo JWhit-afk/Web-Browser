@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
@@ -112,7 +112,17 @@ namespace Web_Browser_CW1.Control {
         }
 
         private void View_HistoryItemClicked(object? sender, UrlEvent e) {
-            throw new NotImplementedException();
+            
+            // Load url into url bar
+            this.view.SetURLInput(e.url);
+
+            // Load the page as normal
+            LoadPage(e.url);
+
+            // Reset history pointer.
+            // TODO:
+            Debug.WriteLine($"Setting position to {historyHandler.GetPosition(e.url)}");
+            historyHandler.SetPosition(historyHandler.GetPosition(e.url));
         }
 
         #endregion
