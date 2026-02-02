@@ -109,6 +109,7 @@
             favourite.TabIndex = 2;
             toolTips.SetToolTip(favourite, "Favorite/Un-Favourite (Ctrl+B)");
             favourite.UseVisualStyleBackColor = true;
+            favourite.Click += new System.EventHandler(this.Bookmark_Click);
             // 
             // previousPage
             // 

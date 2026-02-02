@@ -15,7 +15,7 @@ namespace Web_Browser_CW1
         private void WebBrowser_FormClosing(object sender, FormClosingEventArgs e) {
 
             // Save state and history for next session.
-            this.StateRequest.Invoke(this, new StateArgs { request = StateArgs.Requests.homePageLoad });
+            this.StateRequest.Invoke(this, new StateArgs { request = StateArgs.Requests.save });
         }
 
         #region IView Implementation
@@ -27,6 +27,9 @@ namespace Web_Browser_CW1
         public event EventHandler<UrlEvent> UrlChanged;
         public event EventHandler<UrlEvent> HistoryUpdate;
         public event EventHandler<StateArgs> StateRequest;
+
+        public event EventHandler<UrlEvent> BookmarkClick;
+        public event EventHandler BookmarkItemClicked;
 
         public void UpdateHistoryDropDown(List<string> items) {
 
@@ -101,6 +104,28 @@ namespace Web_Browser_CW1
             this.progressBar.Visible = visible;
         }
 
+        public void UpdateBookmarks(List<string> items) {
+
+            // Clear existing items
+            favouritesToolStripMenuItem.DropDownItems.Clear();
+
+            // Build from newest to oldest
+            for (int i = 0; i < items.Count; i++) {
+
+                // Generate object.
+                var urlItem = new ToolStripMenuItem(items[i]);
+
+                // Asign onclick event
+                urlItem.Click += new EventHandler(Dropdown_Click);
+
+                favouritesToolStripMenuItem.DropDownItems.Add(urlItem);
+            }
+        }
+
+        public void ToggleBookmarkButton(bool isBookmarked) {
+            this.favourite.BackgroundImage = isBookmarked ? Properties.Resources.star_full : Properties.Resources.star_empty;
+        }
+
         #endregion
 
         #region Events
@@ -158,6 +183,11 @@ namespace Web_Browser_CW1
                 this.HistoryItemClicked?.Invoke(sender, new UrlEvent { url = item.Text });
             }
         }
+
+        private void Bookmark_Click(object sender, EventArgs e) {
+            this.BookmarkClick?.Invoke(sender, new UrlEvent { url =  this.urlBar.Text });
+        }
+
 
         //
         // KeyDown Events

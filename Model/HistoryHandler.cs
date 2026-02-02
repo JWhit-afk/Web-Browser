@@ -52,7 +52,7 @@ namespace Web_Browser_CW1.Handlers {
             Debug.WriteLine("Saving History...");
             string json = JsonSerializer.Serialize<List<string>>(history);
             File.WriteAllText(HistoryFilePath, json);
-            Debug.WriteLine("State Saved:");
+            Debug.WriteLine("History Saved:");
             Debug.WriteLine(json);
 
         }

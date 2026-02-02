@@ -28,22 +28,31 @@ namespace Web_Browser_CW1.Control {
             // Subscribe events
             this.view.HistoryNextClick += View_HistoryNextClick;
             this.view.HistoryPreviousClick += View_HistoryPreviousClick;
-            this.view.HistoryUpdate += View_HistoryUpdate;
             this.view.HistoryItemClicked += View_HistoryItemClicked;
+
+            this.view.BookmarkClick += View_BookmarkToggle;
+
             this.view.UrlChanged += View_UrlChanged;
+            this.view.HistoryUpdate += View_HistoryUpdate;
+
             this.view.StateRequest += View_StateRequest;
 
-            // Load from save
-            stateHandler.LoadState();
-            historyHandler.LoadHistory();
+            // Load state
+            View_StateRequest(this, new StateArgs { request = StateArgs.Requests.load });
 
-            // Load homepage
+            // Fetch homepage
             View_LoadPageHomepage(this, EventArgs.Empty);
+
+            // Load bookmarks into view
+            view.UpdateBookmarks(bookmarkHandler.GetBookmarks());
+
         }
 
         // Helper method to load a page from a given URL.
-        // Only interacts with html outputs and progress indicator.
         private async void LoadPage(string url) {
+
+            // Update bookmark icon if the new url is bookmarked or not
+            view.ToggleBookmarkButton(bookmarkHandler.IsBookmarked(url));
 
             // Show progressbar
             view.ToggleProgressIndicator(true);
@@ -120,18 +129,39 @@ namespace Web_Browser_CW1.Control {
             LoadPage(e.url);
 
             // Reset history pointer.
-            // TODO:
             Debug.WriteLine($"Setting position to {historyHandler.GetPosition(e.url)}");
             historyHandler.SetPosition(historyHandler.GetPosition(e.url));
         }
 
         #endregion
 
+        #region Bookmark Event Handlers
+        private void View_BookmarkToggle(object? sender, UrlEvent e) {
+
+            // Toggle bookmark status for the given URL.
+            if (bookmarkHandler.IsBookmarked(e.url)) {
+
+                // If its bookmarked, remove it.
+                bookmarkHandler.RemoveBookmark(e.url);
+            } else {
+
+                // If its not bookmarked, add it.
+                bookmarkHandler.AddBookmark(e.url);
+            }
+
+            // Update bookmark list on view.
+            view.UpdateBookmarks(bookmarkHandler.GetBookmarks());
+
+            // Update button on view to reflect new status.
+            view.ToggleBookmarkButton(bookmarkHandler.IsBookmarked(e.url));
+        }
+        #endregion
+
         #region State Requests.
 
         private void View_StateRequest(object? sender, StateArgs e) {
 
-            Debug.WriteLine($"State request id:{e.request}");
+            Debug.WriteLine($"State request id: {e.request}");
 
             switch (e.request) {
 
@@ -146,22 +176,27 @@ namespace Web_Browser_CW1.Control {
                     break;
 
                 case StateArgs.Requests.save:
-                    Debug.WriteLine("Saving state");
+                    Debug.WriteLine("Saving All");
                     stateHandler.SaveState();
                     historyHandler.SaveHistory();
+                    bookmarkHandler.SaveBookmarks();
+                    Debug.WriteLine("State saved");
                     break;
 
                 case StateArgs.Requests.load:
                     Debug.WriteLine("Loading state");
                     stateHandler.LoadState();
+                    Debug.WriteLine("Loaded state");
                     historyHandler.LoadHistory();
+                    Debug.WriteLine("Loaded history");
+                    bookmarkHandler.LoadBookmarks();
+                    Debug.WriteLine("Loaded Bookmarks");
                     break;
 
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"id:{e.request} is not a recognised request");
             }
         }
-
         #endregion
     }
 }

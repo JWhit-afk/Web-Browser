@@ -2,6 +2,7 @@
 
 namespace Web_Browser_CW1.Views {
 
+    #region Event Types
     public class UrlEvent : EventArgs {
         public required string url;
     }
@@ -20,9 +21,11 @@ namespace Web_Browser_CW1.Views {
 
         public required Requests request;
     }
+    #endregion
 
     internal interface IView {
 
+        #region Event Handlers
         event EventHandler<UrlEvent> UrlChanged;
         event EventHandler<UrlEvent> HistoryUpdate;
         event EventHandler<UrlEvent> HistoryItemClicked;
@@ -32,6 +35,11 @@ namespace Web_Browser_CW1.Views {
         event EventHandler HistoryPreviousClick;
         event EventHandler HistoryNextClick;
 
+        event EventHandler<UrlEvent> BookmarkClick;
+        event EventHandler BookmarkItemClicked;
+        #endregion
+
+        #region View Control Methods
         #region HTML Outputs
         void UpdateHTMLOutput(string htmlContent);
         void UpdateStatusCodeOutput(string statusCode);
@@ -46,12 +54,18 @@ namespace Web_Browser_CW1.Views {
         void RefreshHistoryButtons(int historyCount, int position);
         #endregion
 
+        #region Bookmark Elements
+        void UpdateBookmarks(List<string> items);
+        void ToggleBookmarkButton(bool isBookmarked);
+        #endregion
+
         #region Inputs
         void SetURLInput(string url);
         #endregion
 
         #region Indicators
         void ToggleProgressIndicator(bool visible);
+        #endregion
         #endregion
     }
 }
