@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -38,17 +39,23 @@ namespace Web_Browser_CW1 {
 
         public async Task<HttpResponse> Get(string url) {
 
+            string title = "website";
+            Icon? favicon = null;
+            string responseBody = "";
+            HttpStatusCode statusCode = 0;
+
             try {
 
                 // submit HTTP request
                 using HttpResponseMessage response = await client.GetAsync(url);
-                String responseBody = await response.Content.ReadAsStringAsync();
-                HttpStatusCode statusCode = response.StatusCode;
+
+                responseBody = await response.Content.ReadAsStringAsync();
+                statusCode = response.StatusCode;
 
                 // Get title of page
                 Regex reg = new Regex("<title>(.*)</title>");
                 MatchCollection match = reg.Matches(responseBody);
-                string title = "website";
+                title = "website";
 
                 if (match.Count == 1) {
                     title = match.First().Value;
@@ -56,18 +63,29 @@ namespace Web_Browser_CW1 {
                     title = title.Substring(0, title.Length - 8);
                 }
 
-                // Get favicon
-                Bitmap faviconBitmap = new Bitmap(await client.GetStreamAsync(url + "/favicon.ico"));
-                System.IntPtr handle = faviconBitmap.GetHicon();
-                Icon favicon = Icon.FromHandle(handle);
-
-                return new HttpResponse(title, favicon, responseBody, statusCode);
-
             } catch (Exception ex) {
 
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
                 return new HttpResponse("website", "Unknown error please try again later", 0);
             
+            }
+
+            // Get favicon
+            try {
+                Bitmap faviconBitmap = new Bitmap(await client.GetStreamAsync(url + "/favicon.ico"));
+                System.IntPtr handle = faviconBitmap.GetHicon();
+                favicon = Icon.FromHandle(handle);
+
+            } catch (Exception ex) {
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+            }
+
+            if (favicon != null) {
+                return new HttpResponse(title, favicon, responseBody, statusCode);
+            } else {
+                return new HttpResponse(title, responseBody, statusCode);
             }
         }
     }

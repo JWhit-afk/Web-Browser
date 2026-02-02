@@ -62,7 +62,7 @@ namespace Web_Browser_CW1.Control {
 
             // Update the HTML Outputs
             view.UpdateHTMLOutput(response.body);
-            view.UpdateStatusCodeOutput(response.statusCode.ToString());
+            view.UpdateStatusCodeOutput($"Status Code: {(int) response.statusCode} - {response.statusCode.ToString()}");
             view.UpdateTitleOutput(response.title);
 
             if (response.favicon != null) view.UpdateFaviconOutput(response.favicon);
