@@ -62,8 +62,8 @@ namespace Web_Browser_CW1
             this.Text = title;
         }
 
-        public void UpdateFaviconOutput(Icon favicon) {
-            this.Icon = favicon;
+        public void UpdateFaviconOutput(Bitmap favicon) {
+            this.favicon.Image = favicon;
         }
 
         public void TogglePreviousButton(bool enabled) {

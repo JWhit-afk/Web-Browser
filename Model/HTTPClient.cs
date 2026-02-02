@@ -12,11 +12,11 @@ namespace Web_Browser_CW1 {
     struct HttpResponse {
 
         public string title;
-        public Icon? favicon;
+        public Bitmap favicon;
         public string body;
         public HttpStatusCode statusCode;
 
-        public HttpResponse(string title, Icon favicon, string body, HttpStatusCode statusCode) {
+        public HttpResponse(string title, Bitmap favicon, string body, HttpStatusCode statusCode) {
             this.title = title;
             this.favicon = favicon;
             this.body = body;
@@ -40,7 +40,7 @@ namespace Web_Browser_CW1 {
         public async Task<HttpResponse> Get(string url) {
 
             string title = "website";
-            Icon? favicon = null;
+            Bitmap? favicon = null;
             string responseBody = "";
             HttpStatusCode statusCode = 0;
 
@@ -73,9 +73,7 @@ namespace Web_Browser_CW1 {
 
             // Get favicon
             try {
-                Bitmap faviconBitmap = new Bitmap(await client.GetStreamAsync(url + "/favicon.ico"));
-                System.IntPtr handle = faviconBitmap.GetHicon();
-                favicon = Icon.FromHandle(handle);
+                favicon = new Bitmap(await client.GetStreamAsync(url + "/favicon.ico"));
 
             } catch (Exception ex) {
                 Debug.WriteLine(ex.Message);

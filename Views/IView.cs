@@ -44,7 +44,7 @@ namespace Web_Browser_CW1.Views {
         void UpdateHTMLOutput(string htmlContent);
         void UpdateStatusCodeOutput(string statusCode);
         void UpdateTitleOutput(string title);
-        void UpdateFaviconOutput(Icon favicon);
+        void UpdateFaviconOutput(Bitmap favicon);
         #endregion
 
         #region History Elements
