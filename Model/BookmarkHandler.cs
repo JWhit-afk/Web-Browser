@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.Json;
 
 namespace Web_Browser_CW1.Handlers {
@@ -36,6 +34,12 @@ namespace Web_Browser_CW1.Handlers {
         public BookmarkNotFoundException(string message, Exception inner) : base(message, inner) { }
     }
     #endregion
+
+    /// <summary>
+    /// Singleton collection handling all bookmarks.
+    /// </summary>
+    /// <remarks>Provides services for mainting the state of the application by saving and loading 
+    /// the bookmarks.</remarks>
     internal class BookmarkHandler {
 
         private const string bookmarkFilePath = AppConstants.DataFilePath + "/bookmarks.json";
@@ -46,9 +50,12 @@ namespace Web_Browser_CW1.Handlers {
         public BookmarkHandler() { this.capacity = 10; }
         public BookmarkHandler(int capacity) { this.capacity = capacity; }
 
-        public bool AddBookmark(string url) {
-            if (bookmarks.Count >= 10 || bookmarks.Contains(url)) {
-                return false;
+        /// <summary>
+        /// Adds a URL to the bookmark collection.
+        /// </summary>
+        /// <remarks>Rejects the URL if the maximum number of URLs are contained or the URL is already included.</remarks>
+        /// <param name="url">The URL to add.</param>
+        /// <exception cref="BookmarkFullException">Thrown when bookmark collection is full or URL already exists in collection</exception>
         public void AddBookmark(string url) {
             if (bookmarks.Count >= this.capacity) {
                 throw new BookmarkFullException(this.capacity, this.bookmarks.Count);
@@ -58,7 +65,11 @@ namespace Web_Browser_CW1.Handlers {
             bookmarks.Add(url);
         }
 
-        public bool RemoveBookmark(string url) {
+        /// <summary>
+        /// Removes the bookmark associated with the specified URL from the collection.
+        /// </summary>
+        /// <param name="url">The URL of the bookmark to remove.</param>
+        /// <exception cref="BookmarkNotFoundException">Thrown if a bookmark with the specified URL does not exist in the collection.</exception>
         public void RemoveBookmark(string url) {
             if (!bookmarks.Contains(url)) {
                 throw new BookmarkNotFoundException("Cannot find bookmark to remove");
@@ -67,15 +78,29 @@ namespace Web_Browser_CW1.Handlers {
             bookmarks.Remove(url);
         }
 
+        /// <summary>
+        /// Determines whether the specified URL is present in the bookmarks collection.
+        /// </summary>
+        /// <param name="url">The URL to check for in the collection</param>
+        /// <returns>true if the specified URL is bookmarked; otherwise, false.</returns>
         public bool IsBookmarked(string url) {
             Debug.WriteLine($"{url} in bookmarks? - {bookmarks.Contains(url)}");
             return bookmarks.Contains(url);
         }
 
+        /// <summary>
+        /// Retrieves a list of all saved bookmarks.
+        /// </summary>
+        /// <remarks>The returned list will contain no more than 10 elements.</remarks>
+        /// <returns>A list of strings containing the names or identifiers of all bookmarks. The list will be empty if no
+        /// bookmarks are saved.</returns>
         public List<string> GetBookmarks() {
             return bookmarks;
         }
 
+        /// <summary>
+        /// Loads bookmarks from a previous instance of the application.
+        /// </summary>
         public void LoadBookmarks() {
 
             try {
@@ -95,6 +120,9 @@ namespace Web_Browser_CW1.Handlers {
 
         }
 
+        /// <summary>
+        /// Saves the current collection of bookmarks to persistent storage.
+        /// </summary>
         public void SaveBookmarks() {
             Debug.WriteLine("Saving Bookmarks...");
             string json = JsonSerializer.Serialize<List<string>>(bookmarks);

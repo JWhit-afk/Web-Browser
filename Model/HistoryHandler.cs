@@ -24,13 +24,27 @@ internal class HistoryHandler {
         private List<string> history = new List<string>();
         private int pointer = -1;
 
+        /// <summary>
+        /// Singleton collection handling all history items.
+        /// </summary>
+        /// <remarks>Provides services for mainting the state of the application by saving and loading 
+        /// the history along with navigation.</remarks>
         public HistoryHandler() { }
 
-        public void register(string url) {
+        /// <summary>
+        /// Adds the specified URL to the history and updates the current pointer to the front of the collection.
+        /// </summary>
+        /// <param name="url">The URL to add to the history</param>
+        public void Register(string url) {
             history.Add(url);
             pointer = history.Count - 1;
         }
 
+        /// <summary>
+        /// Retrieves the URL of the previous page in the navigation history.
+        /// </summary>
+        /// <returns>A string containing the URL of the previous page.</returns>
+        /// <exception cref="HistoryOutOfBoundsException">Thrown when there is no previous page in the history to navigate to.</exception>
         public string previousPage() {
             if (pointer <= 0) {
                 throw new HistoryOutOfBoundsException(pointer - 1, history.Count);
@@ -39,6 +53,11 @@ internal class HistoryHandler {
             return history[pointer];
         }
 
+        /// <summary>
+        /// Advances to the next entry in the history and returns its URL.
+        /// </summary>
+        /// <returns>The value of the next history URL</returns>
+        /// <exception cref="HistoryOutOfBoundsException">Thrown when there is no next entry in the history</exception>
         public string nextPage() {
             if (pointer >= history.Count - 1) {
                 throw new HistoryOutOfBoundsException(pointer + 1, history.Count);
@@ -47,6 +66,9 @@ internal class HistoryHandler {
             return history[pointer];
         }
 
+        /// <summary>
+        /// Loads the history from a previous application instance.
+        /// </summary>
         public void LoadHistory() {
 
             try {
@@ -67,6 +89,9 @@ internal class HistoryHandler {
 
         }
 
+        /// <summary>
+        /// Saves the current collection of bookmarks to persistent storage.
+        /// </summary>
         public void SaveHistory() {
 
             Debug.WriteLine("Saving History...");
@@ -77,15 +102,30 @@ internal class HistoryHandler {
 
         }
 
+        /// <summary>
+        /// Retrieves the list of previously visited URLs.
+        /// </summary>
+        /// <returns>A list of strings containing URLs visited. The list will be empty if no URLs have been recorded.</returns>
         public List<string> GetHistory() {
             return history;
         }
 
+        /// <summary>
+        /// Returns the zero-based index of the history pointer, which indicates the index of the currently active URL in the history collection.
+        /// </summary>
+        /// <returns>The zero-based index of the current position</returns>
         public int GetPosition() {
             return pointer;
         }
 
-        public int GetPosition(string url) {
+        /// <summary>
+        /// Returns the zero-based index of the specified URL within the browsing history.
+        /// </summary>
+        /// <remarks>If multiple entries match the specified URL, the index of the first occurrence is
+        /// returned. The comparison is case-sensitive.</remarks>
+        /// <param name="url">The URL to locate in the browsing history. Cannot be null.</param>
+        /// <returns>The zero-based index of the URL if found; otherwise, –1.</returns>
+        public int FindUrl(string url) {
             return history.FindIndex((string u) => {
                 return u == url;
             });

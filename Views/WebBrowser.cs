@@ -15,22 +15,26 @@ namespace Web_Browser_CW1
         private void WebBrowser_FormClosing(object sender, FormClosingEventArgs e) {
 
             // Save state and history for next session.
-            this.StateRequest.Invoke(this, new StateArgs { request = StateArgs.Requests.save });
+            this.StateRequest?.Invoke(this, new StateArgs { request = StateArgs.Requests.save });
         }
 
         #region IView Implementation
 
-        public event EventHandler HistoryPreviousClick;
-        public event EventHandler HistoryNextClick;
+        public event EventHandler? HistoryPreviousClick;
+        public event EventHandler? HistoryNextClick;
         
-        public event EventHandler<UrlEvent> HistoryItemClicked;
-        public event EventHandler<UrlEvent> UrlChanged;
-        public event EventHandler<UrlEvent> HistoryUpdate;
-        public event EventHandler<StateArgs> StateRequest;
+        public event EventHandler<UrlEvent>? DropdownUrlClicked;
+        public event EventHandler<UrlEvent>? UrlChanged;
+        public event EventHandler<UrlEvent>? HistoryUpdate;
+        public event EventHandler<StateArgs>? StateRequest;
 
-        public event EventHandler<UrlEvent> BookmarkClick;
-        public event EventHandler BookmarkItemClicked;
+        public event EventHandler<UrlEvent>? BookmarkClick;
 
+        /// <summary>
+        /// Updates the history dropdown with <paramref name="items"/>
+        /// </summary>
+        /// <remarks>The new dropdown items, onclick will call <see cref="Dropdown_Click"/></remarks>
+        /// <param name="items">The URLs to display</param>
         public void UpdateHistoryDropDown(List<string> items) {
 
             // Clear existing items
@@ -50,32 +54,67 @@ namespace Web_Browser_CW1
             }
         }
 
+        /// <summary>
+        /// Updates the displayed HTML content in the HTML display control.
+        /// </summary>
+        /// <param name="htmlContent">The HTML to display.</param>
         public void UpdateHTMLOutput(string htmlContent) {
             this.htmlDisplay.Text = htmlContent;
         }
 
+        /// <summary>
+        /// Updates the displayed HTTP status code in the output strip.
+        /// </summary>
+        /// <param name="statusCode">The HTTP status code to display.</param>
         public void UpdateStatusCodeOutput(string statusCode) {
             this.HtmlResponseCodeOutput.Text = statusCode;
         }
 
+        /// <summary>
+        /// Sets the title to the specified text.
+        /// </summary>
+        /// <param name="title">The title to display.</param>
         public void UpdateTitleOutput(string title) {
             this.Text = title;
         }
 
+        /// <summary>
+        /// Updates the displayed favicon image with the specified bitmap.
+        /// </summary>
+        /// <param name="favicon">The bitmap image to use as the new favicon.</param>
         public void UpdateFaviconOutput(Bitmap favicon) {
             this.favicon.Image = favicon;
         }
 
+        /// <summary>
+        /// Shows or hides the previous page button.
+        /// </summary>
+        /// <param name="enabled">Boolean indicating whether the previous page button should be visible and enabled. Specify <see
+        /// langword="true"/> to show and enable the button; otherwise, <see langword="false"/> to hide and disable it.</param>
         public void TogglePreviousButton(bool enabled) {
             this.previousPage.Enabled = enabled;
             this.previousPage.Visible = enabled;
         }
 
+        /// <summary>
+        /// Shows or hides the next page button.
+        /// </summary>
+        /// <param name="enabled">Boolean indicating whether the next page button should be visible and enabled. Specify <see
+        /// langword="true"/> to show and enable the button; otherwise, <see langword="false"/> to hide and disable it.</param>
         public void ToggleNextButton(bool enabled) {
             this.nextPage.Enabled = enabled;
             this.nextPage.Visible = enabled;
         }
 
+        /// <summary>
+        /// Toggles the next page previous page buttons if they can function
+        /// </summary>
+        /// <remarks>If the history pointer is pointing to the most recent URL the next page button
+        /// will be disabled; otherwise, enabled. <br/>
+        /// If the history pointer is pointing to the oldest URL the previous page button will be
+        /// disabled; otherwise, enabled.</remarks>
+        /// <param name="historyCount">The number of URLs in the collection.</param>
+        /// <param name="position">The current URL being pointed to by the handler.</param>
         public void RefreshHistoryButtons(int historyCount, int position) {
 
             if (historyCount > 0 && position < historyCount - 1) {
@@ -92,18 +131,29 @@ namespace Web_Browser_CW1
 
         }
 
-        public string GetURLInput() {
-            return this.urlBar.Text;
-        }
-
+        /// <summary>
+        /// Sets the URL bar to a specified URL.
+        /// </summary>
+        /// <remarks>URL changes will trigger a <see cref="UrlChanged"/> event</remarks>
+        /// <param name="url">The URL to update the control with.</param>
         public void SetURLInput(string url) {
             this.urlBar.Text = url;
         }
 
+        /// <summary>
+        /// Toggles the visibility of the progress bar indicator control.
+        /// </summary>
+        /// <param name="visible">Pass <see langword="true"/> to enable; 
+        /// otherwise, <see langword="false"/> to disable </param>
         public void ToggleProgressIndicator(bool visible) {
             this.progressBar.Visible = visible;
         }
 
+        /// <summary>
+        /// Updates the bookmark dropdown with <paramref name="items"/>
+        /// </summary>
+        /// <remarks>The new dropdown items, onclick will call <see cref="Dropdown_Click"/></remarks>
+        /// <param name="items">The URLs to display</param>
         public void UpdateBookmarks(List<string> items) {
 
             // Clear existing items
@@ -122,76 +172,118 @@ namespace Web_Browser_CW1
             }
         }
 
+        /// <summary>
+        /// Toggles bettween the control images that indicate if a URL is bookmarked or not
+        /// </summary>
+        /// <param name="isBookmarked">Pass <see langword="true"/> for the bookmarked image; 
+        /// otherwise, <see langword="false"/> for the non-bookmarked image.</param>
         public void ToggleBookmarkButton(bool isBookmarked) {
             this.favourite.BackgroundImage = isBookmarked ? Properties.Resources.star_full : Properties.Resources.star_empty;
         }
 
         #endregion
 
-        #region Events
+        #region GUI Events
 
-        //
-        // Click Events
-        //
+        #region Click Events
+        /// <summary>
+        /// Event handler for the home button click event.
+        /// </summary>
+        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The button control.</param>
+        /// <param name="e">Default event args</param>
         private void ButtonHome_Click(object sender, EventArgs e) {
 
             // Call the state request event to fetch home and load into url bar.
-            this.StateRequest?.Invoke(this, new StateArgs { request = StateArgs.Requests.homePageLoad });
+            this.StateRequest?.Invoke(sender, new StateArgs { request = StateArgs.Requests.homePageLoad });
 
             // Record visit to history.
-            this.HistoryUpdate?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+            this.HistoryUpdate?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
 
             // Notify subscribers URL changed to load page.
-            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
         }
 
+        /// <summary>
+        /// Event handler for the previous page button click event.
+        /// </summary>
+        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The button control.</param>
+        /// <param name="e">Default event args</param>
         private void ButtonPrev_Click(object sender, EventArgs e) {
 
             // Call the history previous event to navigate back.
-            this.HistoryPreviousClick?.Invoke(this, e);
+            this.HistoryPreviousClick?.Invoke(sender, e);
 
             // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
         }
 
+        /// <summary>
+        /// Event handler for the next page button click event.
+        /// </summary>
+        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The button control.</param>
+        /// <param name="e">Default event args.</param>
         private void ButtonNext_Click(object sender, EventArgs e) {
 
             // Call the history next event to navigate forward.
-            this.HistoryNextClick?.Invoke(this, e);
+            this.HistoryNextClick?.Invoke(sender, e);
 
             // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
         }
 
+        /// <summary>
+        /// Event handler for the search button click event.
+        /// </summary>
+        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The button control.</param>
+        /// <param name="e">Default event args.</param>
         private void ButtonSearch_Click(object sender, EventArgs e) {
 
             // Update history with new url.
-            this.HistoryUpdate?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+            this.HistoryUpdate?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
 
             // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(this, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
         }
 
-        private void Dropdown_Click(object sender, EventArgs e) {
+        /// <summary>
+        /// Event handler for URL dropdown item click event.
+        /// </summary>
+        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The dropdown control.</param>
+        /// <param name="e">Default event args.</param>
+        private void Dropdown_Click(object? sender, EventArgs e) {
 
-            Debug.WriteLine($"Sender: {sender.GetType()}");
+            if (sender != null )
+                Debug.WriteLine($"Sender: {sender.GetType()}");
 
-            if (sender is ToolStripMenuItem) {
-
-                ToolStripMenuItem item = (ToolStripMenuItem) sender;
-
-                this.HistoryItemClicked?.Invoke(sender, new UrlEvent { url = item.Text });
+            if (sender is ToolStripMenuItem { Text: not null } item) {
+                this.DropdownUrlClicked?.Invoke(sender, new UrlEvent { url = item.Text });
             }
         }
 
+        /// <summary>
+        /// Event handler for the bookmark button click event.
+        /// </summary>
+        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The button control.</param>
+        /// <param name="e">Default event args.</param>
         private void Bookmark_Click(object sender, EventArgs e) {
             this.BookmarkClick?.Invoke(sender, new UrlEvent { url =  this.urlBar.Text });
         }
+        #endregion
 
-
-        //
-        // KeyDown Events
-        //
+        #region KeyDown Events
+        /// <summary>
+        /// Event handler for new homepage keydowns.
+        /// </summary>
+        /// <remarks>Only actioned when <see cref="Keys.Enter"/> is pressed. <br/>
+        /// Invokes a <see cref="StateRequest"/> to handle the change.</remarks>
+        /// <param name="sender">The new homepage dropdown control</param>
+        /// <param name="e">Default event args</param>
         private void NewHomePageEnter(object sender, KeyEventArgs e) {
 
             // ignore non-enter keys.
@@ -208,6 +300,7 @@ namespace Web_Browser_CW1
 
         }
 
+        #endregion
         #endregion
 
     }

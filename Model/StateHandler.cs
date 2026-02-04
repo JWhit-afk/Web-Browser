@@ -3,6 +3,10 @@ using System.Text.Json;
 
 namespace Web_Browser_CW1.Handlers {
 
+    /// <summary>
+    /// A catch all singelton for managing the state of the application.
+    /// Handles any state information that is not directly related to bookmarks or history, such as the homepage URL.
+    /// </summary>
     internal class StateHandler {
 
         private const string StateFilePath = AppConstants.DataFilePath + "/config.json";
@@ -10,8 +14,14 @@ namespace Web_Browser_CW1.Handlers {
 
         public string homePageUrl { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the StateHandler class with the default home page URL.
+        /// </summary>
         public StateHandler() { homePageUrl = DefaultHome; }
 
+        /// <summary>
+        /// Loads the application state from persistent storage.
+        /// </summary>
         public void LoadState() {
 
             try {
@@ -33,6 +43,9 @@ namespace Web_Browser_CW1.Handlers {
             }
         }
 
+        /// <summary>
+        /// Saves the state to persistent storage.
+        /// </summary>
         public void SaveState() {
             Debug.WriteLine("Saving State...");
             string json = JsonSerializer.Serialize<StateHandler>(this);
