@@ -3,7 +3,21 @@ using System.Text.Json;
 
 namespace Web_Browser_CW1.Handlers {
 
-    internal class HistoryHandler {
+internal class HistoryHandler {
+
+        #region Exceptions
+        /// <summary>
+        /// The exception that is thrown when an attempt is made to access a position outside the valid range of the
+        /// history collection.
+        /// </summary>
+        /// <remarks>This exception typically indicates that a requested index is less than zero or
+        /// greater than or equal to the total number of items in the history.</remarks>
+        public class HistoryOutOfBoundsException : Exception {
+            public HistoryOutOfBoundsException(int position, int historySize)
+                : base($"The requested history position {position} is out of bounds for history size {historySize}") { }
+            public HistoryOutOfBoundsException(string message, Exception inner) : base(message, inner) { }
+        }
+        #endregion
 
         private const string HistoryFilePath = AppConstants.DataFilePath + "/history.json";
 
@@ -18,11 +32,17 @@ namespace Web_Browser_CW1.Handlers {
         }
 
         public string previousPage() {
+            if (pointer <= 0) {
+                throw new HistoryOutOfBoundsException(pointer - 1, history.Count);
+            }
             pointer--;
             return history[pointer];
         }
 
         public string nextPage() {
+            if (pointer >= history.Count - 1) {
+                throw new HistoryOutOfBoundsException(pointer + 1, history.Count);
+            }
             pointer++;
             return history[pointer];
         }
@@ -40,9 +60,9 @@ namespace Web_Browser_CW1.Handlers {
                     pointer = history.Count - 1;
                 }
 
-                } catch (FileNotFoundException) {
+            } catch (FileNotFoundException) {
                 
-                    File.Create(HistoryFilePath).Close();
+                File.Create(HistoryFilePath).Close();
             }
 
         }
@@ -78,7 +98,7 @@ namespace Web_Browser_CW1.Handlers {
         /// <exception cref="Exception">Thrown when <paramref name="position"/> is out of bounds of history handler </exception>
         public void SetPosition(int position) {
             if (position > history.Count - 1 || position < 0) {
-                throw new Exception($"The requested position {position} is out of bounds {0}:{history.Count-1}");
+                throw new HistoryOutOfBoundsException(position, history.Count);
             }
             pointer = position;
         }
