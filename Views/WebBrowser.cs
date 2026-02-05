@@ -31,6 +31,7 @@ namespace Web_Browser_CW1
 
         public event EventHandler? BookmarkClick;
 
+        public event EventHandler<ShortcutEventArgs>? ShortcutPressed;
 
         /// <summary>
         /// Gets the string located in <see cref="urlBar"/>
@@ -144,7 +145,6 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Sets the URL bar to a specified URL.
         /// </summary>
-        /// <remarks>URL changes will trigger a <see cref="UrlChanged"/> event</remarks>
         /// <param name="url">The URL to update the control with.</param>
         public void SetURLInput(string url) {
             this.urlBar.Text = url;
@@ -230,9 +230,6 @@ namespace Web_Browser_CW1
 
             // Call the history next event to navigate forward.
             this.HistoryNextClick?.Invoke(sender, e);
-
-            // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -307,8 +304,18 @@ namespace Web_Browser_CW1
             );
 
 
-  
+        }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+
+            var args = new ShortcutEventArgs(keyData);
+            ShortcutPressed?.Invoke(this, args);
+
+            if (args.Handled)
+                return true;
+
+            // Else let the form handle.
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         #endregion

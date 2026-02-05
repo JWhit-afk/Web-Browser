@@ -17,6 +17,8 @@ namespace Web_Browser_CW1.Control {
 
         public BookmarkingCoordinator Bookmarker { get; }
 
+        public ShortcutCoordinator Shortcuts { get;  }
+
         public MainCoordinator(
                 // Get view reference to pass to coordinators.
                 IView view,
@@ -48,6 +50,12 @@ namespace Web_Browser_CW1.Control {
                 view,
                 BookmarkHandler,
                 StateHandler
+            );
+
+            // Special - shortcut coordinator uses other coordinators
+            this.Shortcuts = new ShortcutCoordinator(
+                Navigation,
+                Bookmarker
             );
         }
 

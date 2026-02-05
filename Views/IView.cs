@@ -30,6 +30,18 @@ namespace Web_Browser_CW1.Views {
 
         public required Requests request;
     }
+
+    /// <summary>
+    /// Provides event data for shortcut events, including the keys and a callback for handling confirmation.
+    /// </summary>
+    public class ShortcutEventArgs : EventArgs {
+        public Keys Keys { get; }
+        public bool Handled { get; set; }
+
+        public ShortcutEventArgs(Keys keys) {
+            Keys = keys;
+        }
+    }
     #endregion
 
     /// <summary>

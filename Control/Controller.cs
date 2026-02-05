@@ -75,6 +75,9 @@ namespace Web_Browser_CW1.Control {
                 { StateArgs.Requests.load, _ => coordinator.Session.LoadSession() },
             };
             view.StateRequest += (_, e) => View_StateRequest(e);
+
+            // Register shortcut handle
+            view.ShortcutPressed += (_, e) => coordinator.Shortcuts.Handle(e);
         }
 
         /// <summary>

@@ -97,6 +97,13 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// the history.</remarks>
         public void HistoryNext() {
 
+            // Check possible to move in history
+            var count = HistoryHandler.GetHistory().Count;
+            if (count == 0 || HistoryHandler.GetPosition() >= count - 1) {
+                Debug.WriteLine("Cannot navigate forward in history, already at the end.");
+                return;
+            }
+
             Debug.WriteLine($"History next requested, current position: {HistoryHandler.GetPosition()}");
             var url = this.HistoryHandler.nextPage();
 
@@ -113,6 +120,12 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// <remarks>This method updates the URL input field to display the address of the previous page
         /// in the history.</remarks>
         public void HistoryPrevious() {
+
+            // Check possible to move in history
+            if (HistoryHandler.GetHistory().Count == 0 || HistoryHandler.GetPosition() == 0) {
+                Debug.WriteLine("Cannot navigate backward in history, already at the beginning.");
+                return;
+            }
 
             Debug.WriteLine($"History next requested, current position: {HistoryHandler.GetPosition()}");
             var url = this.HistoryHandler.previousPage();
