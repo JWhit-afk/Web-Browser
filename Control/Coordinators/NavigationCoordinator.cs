@@ -92,8 +92,6 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// </summary>
         /// <remarks>This method updates the URL input field to display the address of the next page in
         /// the history.</remarks>
-        /// <param name="sender">The source of the event, the control that was clicked</param>
-        /// <param name="e">An <see cref="EventArgs"/>Empty</param>
         public void HistoryNext() {
 
             Debug.WriteLine($"History next requested, current position: {HistoryHandler.GetPosition()}");
@@ -107,8 +105,6 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// </summary>
         /// <remarks>This method updates the URL input field to display the address of the previous page
         /// in the history.</remarks>
-        /// <param name="sender">The source of the event, the control that was clicked.</param>
-        /// <param name="e">An <see cref="EventArgs"/>Empty</param>
         public void HistoryPrevious() {
 
             Debug.WriteLine($"History next requested, current position: {HistoryHandler.GetPosition()}");
@@ -121,8 +117,6 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// Handles the event triggered when a new URL is registered.
         /// </summary>
         /// <remarks>This method registers the given url to the history handler and re-loads the dropdown</remarks>
-        /// <param name="sender">The source of the event. Usually the view</param>
-        /// <param name="e">An event argument containing the registered URL.</param>
         public void HistoryRegister() {
 
             string url = view.GetUrlInput();
@@ -138,42 +132,40 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// Handles the event triggered when a URL is selected from the dropdown, updating the URL input, loading the
         /// corresponding page, and resetting the browsing history position to that URL.
         /// </summary>
-        /// <param name="sender">The source of the event, The dropdown control that was clicked (bookmark or history)</param>
-        /// <param name="e">An event argument containing the URL to be loaded.</param>
-        public void HistoryRequest() {
-
-            string url = view.GetUrlInput();
+        /// <param name="e">An event argument containing the URL requested from the user.</param>
+        public void HistoryRequest(SelectedUrlArgs e) {
 
             // Load url into url bar
-            this.view.SetURLInput(url);
+            this.view.SetURLInput(e.url);
 
             // Load the page as normal
-            LoadPage(url);
+            LoadPage(e.url);
 
             // Reset history pointer.
-            Debug.WriteLine($"Setting position to {HistoryHandler.FindUrl(url)}");
-            HistoryHandler.SetPosition(HistoryHandler.FindUrl(url));
+            Debug.WriteLine($"Setting position to {HistoryHandler.FindUrl(e.url)}");
+            HistoryHandler.SetPosition(HistoryHandler.FindUrl(e.url));
         }
 
-        public void BookmarkRequest() {
+        /// <summary>
+        /// Handles the event triggered when a URL is selected from the dropdown, updating the URL input, loading the
+        /// corresponding page.
+        /// </summary>
+        /// <param name="e">An event argument containing the URL requested from the user.</param>
+        public void BookmarkRequest(SelectedUrlArgs e) {
 
-            string url = view.GetUrlInput();
-
-            Debug.WriteLine($"Bookmark request for {url}");
+            Debug.WriteLine($"Bookmark request for {e.url}");
 
             // Load url into url bar
-            this.view.SetURLInput(url);
+            this.view.SetURLInput(e.url);
 
             // Load the page as normal
-            LoadPage(url);
+            LoadPage(e.url);
 
         }
 
         /// <summary>
         /// Handles the event triggered when the view's URL changes, updating the URL input and loading the new page.
         /// </summary>
-        /// <param name="sender">The view control whose URL has changed.</param>
-        /// <param name="e">An event argument containing the new URL.</param>
         public void NavigateFromURL() {
 
             string url = view.GetUrlInput();

@@ -21,12 +21,12 @@ namespace Web_Browser_CW1
 
         public event EventHandler? HistoryPreviousClick;
         public event EventHandler? HistoryNextClick;
+        public event EventHandler? HistoryRegister;
 
-        public event EventHandler? HistoryDropDownClick;
-        public event EventHandler? BookmarkDropDownClick;
+        public event EventHandler<SelectedUrlArgs>? HistoryDropDownClick;
+        public event EventHandler<SelectedUrlArgs>? BookmarkDropDownClick;
 
         public event EventHandler? UrlChanged;
-        public event EventHandler? HistoryRegister;
         public event EventHandler<StateArgs>? StateRequest;
 
         public event EventHandler? BookmarkClick;
@@ -273,7 +273,7 @@ namespace Web_Browser_CW1
 
             if (sender is ToolStripMenuItem { Text: not null } item) {
 
-                this.HistoryDropDownClick?.Invoke(sender, e);
+                this.HistoryDropDownClick?.Invoke(sender, new SelectedUrlArgs { url = item.Text });
             }
         }
 
@@ -283,7 +283,7 @@ namespace Web_Browser_CW1
                 Debug.WriteLine($"Sender: {sender.GetType()}");
 
             if (sender is ToolStripMenuItem { Text: not null } item) {
-                this.BookmarkDropDownClick?.Invoke(sender, e);
+                this.BookmarkDropDownClick?.Invoke(sender, new SelectedUrlArgs { url = item.Text });
             }
         }
 

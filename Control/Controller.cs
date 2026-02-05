@@ -48,15 +48,19 @@ namespace Web_Browser_CW1.Control {
         }
 #       pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor
 
+        /// <summary>
+        /// Subscribes coordinator handlers to the views events.
+        /// </summary>
+        /// <remarks>Dab</remarks>
         private void SubscribeEvents() {
 
             // Navigation Requests (History navigation, URL changes, dropdown requests etc) are deligated to the navigation coordinator.
             view.HistoryRegister += (_, _) => coordinator.Navigation.HistoryRegister();
             view.HistoryNextClick += (_, _) => coordinator.Navigation.HistoryNext();
             view.HistoryPreviousClick += (_, _) => coordinator.Navigation.HistoryPrevious();
-            view.HistoryDropDownClick += (_, _) => coordinator.Navigation.HistoryRequest();
 
-            view.BookmarkDropDownClick += (_, _) => coordinator.Navigation.BookmarkRequest();
+            view.HistoryDropDownClick += (_, e) => coordinator.Navigation.HistoryRequest(e);
+            view.BookmarkDropDownClick += (_, e) => coordinator.Navigation.BookmarkRequest(e);
 
             view.UrlChanged += (_, _) => coordinator.Navigation.NavigateFromURL();
 

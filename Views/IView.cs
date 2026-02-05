@@ -5,6 +5,13 @@ namespace Web_Browser_CW1.Views {
     #region Event Types
 
     /// <summary>
+    /// Provides event data for when a is new URL being requested from a dropdown.
+    /// </summary>
+    public class SelectedUrlArgs : EventArgs {
+        public required string url;
+    }
+
+    /// <summary>
     /// Provides event data for state-related operations, including the requested action.
     /// </summary>
     /// <remarks>The class is used to pass details about state requests, such as loading or saving state, to
@@ -31,20 +38,20 @@ namespace Web_Browser_CW1.Views {
     internal interface IView {
 
         #region Event Handlers
-        event EventHandler UrlChanged;
-
-        event EventHandler<StateArgs> StateRequest;
 
         event EventHandler HistoryPreviousClick;
         event EventHandler HistoryNextClick;
         event EventHandler HistoryRegister;
 
-        event EventHandler HistoryDropDownClick;
-        event EventHandler BookmarkDropDownClick;
+        event EventHandler<SelectedUrlArgs> HistoryDropDownClick;
+        event EventHandler<SelectedUrlArgs> BookmarkDropDownClick;
+
+        event EventHandler UrlChanged;
+        event EventHandler<StateArgs> StateRequest;
 
         event EventHandler BookmarkClick;
 
-        event EventHandler<UrlEvent> BookmarkClick;
+        event EventHandler<ShortcutEventArgs> ShortcutPressed;
         #endregion
 
         #region View Control Methods
