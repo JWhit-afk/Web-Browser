@@ -38,7 +38,7 @@ namespace Web_Browser_CW1.Handlers {
     /// <summary>
     /// Singleton collection handling all bookmarks.
     /// </summary>
-    /// <remarks>Provides services for mainting the state of the application by saving and loading 
+    /// <remarks>Provides services for maintaining the state of the application by saving and loading 
     /// the bookmarks.</remarks>
     internal class BookmarkHandler {
 

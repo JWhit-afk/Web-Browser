@@ -4,8 +4,10 @@ using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Control {
 
-    // Deligates tasks to the relevent coordinators, such as navigation and session management.
-
+    /// <summary>
+    /// Delegates tasks to the relevant coordinators, such as navigation and session management.
+    /// </summary>
+    /// <remarks>Acts as a coordinator factory. Sets up the others that will handle the delegation.</remarks>
     internal class MainCoordinator {
 
         BookmarkHandler BookmarkHandler;
@@ -34,7 +36,7 @@ namespace Web_Browser_CW1.Control {
             this.HistoryHandler = historyHandler;
             this.StateHandler = stateHandler;
 
-            // Initalise logic coordinators, passing in the handlers needed.
+            // Initialise logic coordinators, passing in the handlers needed.
             this.Navigation = new NavigationCoordinator(
                 view,
                 HistoryHandler,
@@ -59,6 +61,9 @@ namespace Web_Browser_CW1.Control {
             );
         }
 
+        /// <summary>
+        /// Initialises the application by loading data from the previous session (if any).
+        /// </summary>
         public void Initialise() {
 
             Session.LoadSession();

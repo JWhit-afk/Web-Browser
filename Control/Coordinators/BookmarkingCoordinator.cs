@@ -23,6 +23,9 @@ namespace Web_Browser_CW1.Control.Coordinators {
             this.StateHandler = StateHandler;
         }
 
+        /// <summary>
+        /// Handles the loading of the bookmark UI by retrieving the current list of bookmarks from the BookmarkHandler.
+        /// </summary>
         public void LoadBookmarkUI() {
 
             // Get bookmarks from handler and update the view.

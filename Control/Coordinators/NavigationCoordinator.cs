@@ -5,6 +5,10 @@ using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Control.Coordinators {
 
+    /// <summary>
+    /// Coordinates navigation-related interactions between the view and the underlying handlers, 
+    /// managing page loading, history navigation, and bookmark status updates.
+    /// </summary>
     internal class NavigationCoordinator {
 
         IView view;
@@ -19,7 +23,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
             StateHandler stateHandler
             ) {
 
-            // Get view refereance.
+            // Get view reference.
             this.view = view;
 
             // Assign references to handlers for use in the coordinator.
@@ -31,9 +35,9 @@ namespace Web_Browser_CW1.Control.Coordinators {
         #region HTML Requests
         /// <summary>
         /// Loads the web page at the specified URL and updates the view with the page's content, 
-        /// status, title and favicon, if avaliable.
+        /// status, title and favicon, if available.
         /// </summary>
-        /// <remarks>This method updates the the bookmark icon, progress indicator, HTML output, status code, 
+        /// <remarks>This method updates the bookmark icon, progress indicator, HTML output, status code, 
         /// page title, favicon, and navigation history buttons, based on the
         /// result of loading the specified URL. The method is asynchronous and returns immediately; UI updates occur as
         /// the page load completes.</remarks>
@@ -44,7 +48,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
             // Update bookmark icon if the new url is bookmarked or not
             view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
 
-            // Show progressbar
+            // Show progress bar
             view.ToggleProgressIndicator(true);
 
             // Load the url from the url bar text input.
@@ -68,7 +72,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// Loads the homepage URL defined in the state handler, updates the URL input field.
         /// </summary>
         /// <remarks> This method sets the URL input field to the homepage URL, 
-        /// loads the homepage, and logs the visit in the history handler, updating the history dropdown accordingly.
+        /// loads the homepage, and logs the visit in the history handler, updating the history drop-down accordingly.
         /// </remarks>
         public void LoadHomepage() {
 
@@ -84,7 +88,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
             // Ensure buttons are correctly enabled/disabled based on the updated history.
             view.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
 
-            // Update the history dropdowns as history log updated.
+            // Update the history drop-downs as history log updated.
             view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
         }
         #endregion
@@ -138,7 +142,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         }
 
         /// <summary>
-        /// Handles the event triggered when a URL is selected from the dropdown, updating the URL input, loading the
+        /// Handles the event triggered when a URL is selected from the drop-down, updating the URL input, loading the
         /// corresponding page, and resetting the browsing history position to that URL.
         /// </summary>
         /// <param name="e">An event argument containing the URL requested from the user.</param>
@@ -156,7 +160,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         }
 
         /// <summary>
-        /// Handles the event triggered when a URL is selected from the dropdown, updating the URL input, loading the
+        /// Handles the event triggered when a URL is selected from the drop-down, updating the URL input, loading the
         /// corresponding page.
         /// </summary>
         /// <param name="e">An event argument containing the URL requested from the user.</param>

@@ -31,12 +31,12 @@ namespace Web_Browser_CW1.Control {
         #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. line 50 initializes this field, but the compiler cannot infer that.
         public Controller(IView view) {
 
-            // Constuct handlers (the model)
+            // Construct handlers (the model)
             BookmarkHandler = new();
             HistoryHandler = new();
             StateHandler = new();
 
-            // Get app reference (Deligation service) and view (GUI Updates)
+            // Get app reference (Delegation service) and view (GUI Updates)
             this.view = view;
             this.coordinator = new(view, BookmarkHandler, HistoryHandler, StateHandler);
 
@@ -54,7 +54,7 @@ namespace Web_Browser_CW1.Control {
         /// <remarks>Dab</remarks>
         private void SubscribeEvents() {
 
-            // Navigation Requests (History navigation, URL changes, dropdown requests etc) are deligated to the navigation coordinator.
+            // Navigation Requests (History navigation, URL changes, drop-down requests etc) are delegated to the navigation coordinator.
             view.HistoryNextClick += (_, _) => coordinator.Navigation.HistoryNext();
             view.HistoryPreviousClick += (_, _) => coordinator.Navigation.HistoryPrevious();
 
@@ -63,7 +63,7 @@ namespace Web_Browser_CW1.Control {
 
             view.UrlSubmit += (_, _) => coordinator.Navigation.NavigateFromURL();
 
-            // Bookmarking Requests (Bookmark UI updates, e.g., anything not realated to navigation) are deligated to the bookmarking coordinator.
+            // Bookmarking Requests (Bookmark UI updates, e.g., anything not related to navigation) are delegated to the bookmarking coordinator.
             view.BookmarkClick += (_, e) => coordinator.Bookmarker.BookmarkClick();
 
             // Session Requests (Anything that requires saving / loading) are handled internally by _stateHandlers which, in turn calls the session coordinator.

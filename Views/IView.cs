@@ -5,7 +5,7 @@ namespace Web_Browser_CW1.Views {
     #region Event Types
 
     /// <summary>
-    /// Provides event data for when a is new URL being requested from a dropdown.
+    /// Provides event data for when a is new URL being requested from a drop-down.
     /// </summary>
     public class SelectedUrlArgs : EventArgs {
         public required string url;

@@ -5,6 +5,10 @@ using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Control.Coordinators {
 
+    /// <summary>
+    /// Coordinates keyboard shortcuts and delegates actions to the appropriate coordinators (e.g., NavigationCoordinator, BookmarkingCoordinator).
+    /// Acting as if they had been registered as event handlers for the relevant events.
+    /// </summary>
     internal class ShortcutCoordinator {
 
         private readonly Dictionary<Keys, Action> _shortcutHandlers;
@@ -32,6 +36,12 @@ namespace Web_Browser_CW1.Control.Coordinators {
             };
         }
 
+        /// <summary>
+        /// Calls the appropriate action based on the keys pressed, as defined in <see cref="_shortcutHandlers"/>. 
+        /// If a matching shortcut is found, it marks the event as handled to prevent further propagation.
+        /// </summary>
+        /// <param name="e">The event arguments containing the key(s) pressed and a callback to designate 
+        /// if the combination has been handled internally to prevent propagation of already handled shortcuts.</param>
         public void Handle(ShortcutEventArgs e) {
 
             Debug.WriteLine($"Handle Shortcut: {e.Keys}");

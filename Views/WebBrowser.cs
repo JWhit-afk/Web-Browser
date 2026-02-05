@@ -42,9 +42,9 @@ namespace Web_Browser_CW1
         }
 
         /// <summary>
-        /// Updates the history dropdown with <paramref name="items"/>
+        /// Updates the history drop-down with <paramref name="items"/>
         /// </summary>
-        /// <remarks>The new dropdown items, onclick will call <see cref="HistoryDropDown_Click"/></remarks>
+        /// <remarks>The new drop-down items, on-click will call <see cref="HistoryDropDown_Click"/></remarks>
         /// <param name="items">The URLs to display</param>
         public void UpdateHistoryDropDown(List<string> items) {
 
@@ -58,7 +58,7 @@ namespace Web_Browser_CW1
                 var item = items[items.Count - 1 - i];
                 var urlItem = new ToolStripMenuItem(item);
 
-                // Asign onclick event
+                // Assign on-click event
                 urlItem.Click += new EventHandler(HistoryDropDown_Click);
 
                 historyToolStripMenuItem.DropDownItems.Add(urlItem);
@@ -160,9 +160,9 @@ namespace Web_Browser_CW1
         }
 
         /// <summary>
-        /// Updates the bookmark dropdown with <paramref name="items"/>
+        /// Updates the bookmark drop-down with <paramref name="items"/>
         /// </summary>
-        /// <remarks>The new dropdown items, onclick will call <see cref="BookmarkDropDown_Click"/></remarks>
+        /// <remarks>The new drop-down items, on-click will call <see cref="BookmarkDropDown_Click"/></remarks>
         /// <param name="items">The URLs to display</param>
         public void UpdateBookmarks(List<string> items) {
 
@@ -175,7 +175,7 @@ namespace Web_Browser_CW1
                 // Generate object.
                 var urlItem = new ToolStripMenuItem(items[i]);
 
-                // Asign onclick event
+                // Assign on-click event
                 urlItem.Click += new EventHandler(BookmarkDropDown_Click);
 
                 favouritesToolStripMenuItem.DropDownItems.Add(urlItem);
@@ -183,7 +183,7 @@ namespace Web_Browser_CW1
         }
 
         /// <summary>
-        /// Toggles bettween the control images that indicate if a URL is bookmarked or not
+        /// Toggles between the control images that indicate if a URL is bookmarked or not
         /// </summary>
         /// <param name="isBookmarked">Pass <see langword="true"/> for the bookmarked image; 
         /// otherwise, <see langword="false"/> for the non-bookmarked image.</param>
@@ -199,7 +199,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the home button click event.
         /// </summary>
-        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args</param>
         private void ButtonHome_Click(object sender, EventArgs e) {
@@ -211,7 +211,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the previous page button click event.
         /// </summary>
-        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args</param>
         private void ButtonPrev_Click(object sender, EventArgs e) {
@@ -223,7 +223,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the next page button click event.
         /// </summary>
-        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void ButtonNext_Click(object sender, EventArgs e) {
@@ -235,7 +235,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the search button click event.
         /// </summary>
-        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void ButtonSearch_Click(object sender, EventArgs e) {
@@ -245,10 +245,10 @@ namespace Web_Browser_CW1
         }
 
         /// <summary>
-        /// Event handler for URL dropdown item click event.
+        /// Event handler for URL drop-down item click event.
         /// </summary>
-        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
-        /// <param name="sender">The dropdown control.</param>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The drop-down control.</param>
         /// <param name="e">Default event args.</param>
         private void HistoryDropDown_Click(object? sender, EventArgs e) {
 
@@ -261,6 +261,12 @@ namespace Web_Browser_CW1
             }
         }
 
+        /// <summary>
+        /// Event handler for bookmark drop-down item click event.
+        /// </summary>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <param name="sender">The drop-down control.</param>
+        /// <param name="e">Default event args.</param>
         private void BookmarkDropDown_Click(object? sender, EventArgs e) {
 
             if (sender != null)
@@ -274,7 +280,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the bookmark button click event.
         /// </summary>
-        /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void Bookmark_Click(object sender, EventArgs e) {
@@ -284,11 +290,11 @@ namespace Web_Browser_CW1
 
         #region KeyDown Events
         /// <summary>
-        /// Event handler for new homepage keydowns.
+        /// Event handler for new homepage key-downs.
         /// </summary>
         /// <remarks>Only actioned when <see cref="Keys.Enter"/> is pressed. <br/>
         /// Invokes a <see cref="StateRequest"/> to handle the change.</remarks>
-        /// <param name="sender">The new homepage dropdown control</param>
+        /// <param name="sender">The new homepage drop-down control</param>
         /// <param name="e">Default event args</param>
         private void NewHomePageEnter(object sender, KeyEventArgs e) {
 
@@ -306,6 +312,13 @@ namespace Web_Browser_CW1
 
         }
 
+        /// <summary>
+        /// Override of the form's key command processing method to capture shortcut key presses.
+        /// </summary>
+        /// <remarks>Raises a <see cref="ShortcutPressed"/> event with the pressed keys.</remarks>
+        /// <param name="msg">A windows message.</param>
+        /// <param name="keyData">The key(s) pressed</param>
+        /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
 
             var args = new ShortcutEventArgs(keyData);

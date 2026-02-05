@@ -4,7 +4,7 @@ using System.Text.Json;
 namespace Web_Browser_CW1.Handlers {
 
     /// <summary>
-    /// A catch all singelton for managing the state of the application.
+    /// A catch all singleton for managing the state of the application.
     /// Handles any state information that is not directly related to bookmarks or history, such as the homepage URL.
     /// </summary>
     internal class StateHandler {
@@ -37,7 +37,7 @@ namespace Web_Browser_CW1.Handlers {
             
             } catch (JsonException) {
 
-                // FIle does not contian json tokens or json is corrupted.
+                // File does not contain json tokens or json is corrupted.
                 File.Delete(StateFilePath);
                 File.Create(StateFilePath).Close();
             }
