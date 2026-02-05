@@ -39,7 +39,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// the page load completes.</remarks>
         /// <param name="url">The URL of the web page to load. Must be a valid, non-empty string representing an absolute or relative
         /// address.</param>
-        public async void LoadPage(string url) {
+        private async void LoadPage(string url) {
 
             // Update bookmark icon if the new url is bookmarked or not
             view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
@@ -123,10 +123,12 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// <remarks>This method registers the given url to the history handler and re-loads the dropdown</remarks>
         /// <param name="sender">The source of the event. Usually the view</param>
         /// <param name="e">An event argument containing the registered URL.</param>
-        public void HistoryRegister(UrlEvent e) {
+        public void HistoryRegister() {
+
+            string url = view.GetUrlInput();
 
             // Register the new URL in the history handler.
-            HistoryHandler.Register(e.url);
+            HistoryHandler.Register(url);
 
             // Update the history dropdowns as history log updated.
             view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
@@ -138,28 +140,32 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// </summary>
         /// <param name="sender">The source of the event, The dropdown control that was clicked (bookmark or history)</param>
         /// <param name="e">An event argument containing the URL to be loaded.</param>
-        public void HistoryRequest(UrlEvent e) {
+        public void HistoryRequest() {
+
+            string url = view.GetUrlInput();
 
             // Load url into url bar
-            this.view.SetURLInput(e.url);
+            this.view.SetURLInput(url);
 
             // Load the page as normal
-            LoadPage(e.url);
+            LoadPage(url);
 
             // Reset history pointer.
-            Debug.WriteLine($"Setting position to {HistoryHandler.FindUrl(e.url)}");
-            HistoryHandler.SetPosition(HistoryHandler.FindUrl(e.url));
+            Debug.WriteLine($"Setting position to {HistoryHandler.FindUrl(url)}");
+            HistoryHandler.SetPosition(HistoryHandler.FindUrl(url));
         }
 
-        public void BookmarkRequest(UrlEvent e) {
+        public void BookmarkRequest() {
 
-            Debug.WriteLine($"Bookmark request for {e.url}");
+            string url = view.GetUrlInput();
+
+            Debug.WriteLine($"Bookmark request for {url}");
 
             // Load url into url bar
-            this.view.SetURLInput(e.url);
+            this.view.SetURLInput(url);
 
             // Load the page as normal
-            LoadPage(e.url);
+            LoadPage(url);
 
         }
 
@@ -168,15 +174,16 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// </summary>
         /// <param name="sender">The view control whose URL has changed.</param>
         /// <param name="e">An event argument containing the new URL.</param>
-        public void UrlChanged(UrlEvent e) {
+        public void NavigateFromURL() {
 
-            Debug.WriteLine($"URL changed to: {e.url} \t Loading...");
+            string url = view.GetUrlInput();
+            Debug.WriteLine($"URL changed to: {url} \t Loading...");
 
             // Load address into URL bar.
-            view.SetURLInput(e.url);
+            view.SetURLInput(url);
 
             // Load the new URL.
-            LoadPage(e.url);
+            LoadPage(url);
         }
 
 

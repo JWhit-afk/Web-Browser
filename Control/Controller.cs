@@ -51,17 +51,17 @@ namespace Web_Browser_CW1.Control {
         private void SubscribeEvents() {
 
             // Navigation Requests (History navigation, URL changes, dropdown requests etc) are deligated to the navigation coordinator.
-            view.HistoryRegister += (_, e) => coordinator.Navigation.HistoryRegister(e: e);
+            view.HistoryRegister += (_, _) => coordinator.Navigation.HistoryRegister();
             view.HistoryNextClick += (_, _) => coordinator.Navigation.HistoryNext();
             view.HistoryPreviousClick += (_, _) => coordinator.Navigation.HistoryPrevious();
-            view.HistoryDropDownClick += (_, e) => coordinator.Navigation.HistoryRequest(e: e);
+            view.HistoryDropDownClick += (_, _) => coordinator.Navigation.HistoryRequest();
 
-            view.BookmarkDropDownClick += (_, e) => coordinator.Navigation.BookmarkRequest(e: e);
+            view.BookmarkDropDownClick += (_, _) => coordinator.Navigation.BookmarkRequest();
 
-            view.UrlChanged += (_, e) => coordinator.Navigation.UrlChanged(e: e);
+            view.UrlChanged += (_, _) => coordinator.Navigation.NavigateFromURL();
 
             // Bookmarking Requests (Bookmark UI updates, e.g., anything not realated to navigation) are deligated to the bookmarking coordinator.
-            view.BookmarkClick += (_, e) => coordinator.Bookmarker.BookmarkClick(e: e);
+            view.BookmarkClick += (_, e) => coordinator.Bookmarker.BookmarkClick();
 
             // Session Requests (Anything that requires saving / loading) are handled internally by _stateHandlers which, in turn calls the session coordinator.
             _stateHandlers = new()

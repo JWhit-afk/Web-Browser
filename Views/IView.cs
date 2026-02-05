@@ -3,12 +3,6 @@
 namespace Web_Browser_CW1.Views {
 
     #region Event Types
-    /// <summary>
-    /// Provides data for events related to a URL, such as when a URL is opened or processed.
-    /// </summary>
-    public class UrlEvent : EventArgs {
-        public required string url;
-    }
 
     /// <summary>
     /// Provides event data for state-related operations, including the requested action.
@@ -37,16 +31,18 @@ namespace Web_Browser_CW1.Views {
     internal interface IView {
 
         #region Event Handlers
-        event EventHandler<UrlEvent> UrlChanged;
+        event EventHandler UrlChanged;
 
         event EventHandler<StateArgs> StateRequest;
 
         event EventHandler HistoryPreviousClick;
         event EventHandler HistoryNextClick;
-        event EventHandler<UrlEvent> HistoryRegister;
+        event EventHandler HistoryRegister;
 
-        event EventHandler<UrlEvent> HistoryDropDownClick;
-        event EventHandler<UrlEvent>? BookmarkDropDownClick;
+        event EventHandler HistoryDropDownClick;
+        event EventHandler BookmarkDropDownClick;
+
+        event EventHandler BookmarkClick;
 
         event EventHandler<UrlEvent> BookmarkClick;
         #endregion
@@ -73,6 +69,7 @@ namespace Web_Browser_CW1.Views {
 
         #region Inputs
         void SetURLInput(string url);
+        string GetUrlInput();
         #endregion
 
         #region Indicators

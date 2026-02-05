@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Windows.Forms;
-using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1
@@ -24,15 +22,24 @@ namespace Web_Browser_CW1
         public event EventHandler? HistoryPreviousClick;
         public event EventHandler? HistoryNextClick;
 
-        public event EventHandler<UrlEvent>? HistoryDropDownClick;
-        public event EventHandler<UrlEvent>? BookmarkDropDownClick;
+        public event EventHandler? HistoryDropDownClick;
+        public event EventHandler? BookmarkDropDownClick;
 
-        public event EventHandler<UrlEvent>? UrlChanged;
-        public event EventHandler<UrlEvent>? HistoryRegister;
+        public event EventHandler? UrlChanged;
+        public event EventHandler? HistoryRegister;
         public event EventHandler<StateArgs>? StateRequest;
 
-        public event EventHandler<UrlEvent>? BookmarkClick;
+        public event EventHandler? BookmarkClick;
 
+
+        /// <summary>
+        /// Gets the string located in <see cref="urlBar"/>
+        /// </summary>
+        /// <returns>A possibly empty string</returns>
+
+        public string GetUrlInput() {
+            return this.urlBar.Text;
+        }
 
         /// <summary>
         /// Updates the history dropdown with <paramref name="items"/>
@@ -202,10 +209,10 @@ namespace Web_Browser_CW1
             this.StateRequest?.Invoke(sender, new StateArgs { request = StateArgs.Requests.homePageLoad });
 
             // Record visit to history.
-            this.HistoryRegister?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.HistoryRegister?.Invoke(sender, e);
 
             // Notify subscribers URL changed to load page.
-            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -220,7 +227,7 @@ namespace Web_Browser_CW1
             this.HistoryPreviousClick?.Invoke(sender, e);
 
             // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -235,7 +242,7 @@ namespace Web_Browser_CW1
             this.HistoryNextClick?.Invoke(sender, e);
 
             // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -247,10 +254,10 @@ namespace Web_Browser_CW1
         private void ButtonSearch_Click(object sender, EventArgs e) {
 
             // Update history with new url.
-            this.HistoryRegister?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.HistoryRegister?.Invoke(sender, e);
 
             // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -266,7 +273,7 @@ namespace Web_Browser_CW1
 
             if (sender is ToolStripMenuItem { Text: not null } item) {
 
-                this.HistoryDropDownClick?.Invoke(sender, new UrlEvent { url = item.Text });
+                this.HistoryDropDownClick?.Invoke(sender, e);
             }
         }
 
@@ -276,7 +283,7 @@ namespace Web_Browser_CW1
                 Debug.WriteLine($"Sender: {sender.GetType()}");
 
             if (sender is ToolStripMenuItem { Text: not null } item) {
-                this.BookmarkDropDownClick?.Invoke(sender, new UrlEvent { url = item.Text });
+                this.BookmarkDropDownClick?.Invoke(sender, e);
             }
         }
 
@@ -287,7 +294,7 @@ namespace Web_Browser_CW1
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void Bookmark_Click(object sender, EventArgs e) {
-            this.BookmarkClick?.Invoke(sender, new UrlEvent { url =  this.urlBar.Text });
+            this.BookmarkClick?.Invoke(sender, e);
         }
         #endregion
 
@@ -312,6 +319,8 @@ namespace Web_Browser_CW1
                 }
             );
 
+
+  
 
         }
 

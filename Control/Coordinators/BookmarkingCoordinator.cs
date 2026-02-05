@@ -40,26 +40,27 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// to reflect the current bookmark status of the URL.</remarks>
         /// <param name="sender">The source of the event, the bookmark button.</param>
         /// <param name="e">An event argument containing the URL to be bookmarked or unbookmarked.</param>
-        public void BookmarkClick(UrlEvent e) {
+        public void BookmarkClick() {
 
             Debug.WriteLine($"Bookmark button clicked for URL");
+            string url = view.GetUrlInput();
 
             // Toggle bookmark status for the given URL.
-            if (BookmarkHandler.IsBookmarked(e.url)) {
+            if (BookmarkHandler.IsBookmarked(url)) {
 
                 // If its bookmarked, remove it.
-                BookmarkHandler.RemoveBookmark(e.url);
+                BookmarkHandler.RemoveBookmark(url);
             } else {
 
                 // If its not bookmarked, add it.
-                BookmarkHandler.AddBookmark(e.url);
+                BookmarkHandler.AddBookmark(url);
             }
 
             // Update bookmark list on view.
             view.UpdateBookmarks(BookmarkHandler.GetBookmarks());
 
             // Update button on view to reflect new status.
-            view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(e.url));
+            view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
         }
     }
 }
