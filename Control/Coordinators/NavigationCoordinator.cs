@@ -81,6 +81,9 @@ namespace Web_Browser_CW1.Control.Coordinators {
             // Log the visit in history
             HistoryHandler.Register(StateHandler.homePageUrl);
 
+            // Ensure buttons are correctly enabled/disabled based on the updated history.
+            view.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
+
             // Update the history dropdowns as history log updated.
             view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
         }
@@ -95,9 +98,13 @@ namespace Web_Browser_CW1.Control.Coordinators {
         public void HistoryNext() {
 
             Debug.WriteLine($"History next requested, current position: {HistoryHandler.GetPosition()}");
+            var url = this.HistoryHandler.nextPage();
 
             // Load next address into URL bar.
-            view.SetURLInput(this.HistoryHandler.nextPage());
+            view.SetURLInput(url);
+
+            // Load page as normal.
+            LoadPage(url);
         }
 
         /// <summary>
@@ -108,24 +115,13 @@ namespace Web_Browser_CW1.Control.Coordinators {
         public void HistoryPrevious() {
 
             Debug.WriteLine($"History next requested, current position: {HistoryHandler.GetPosition()}");
+            var url = this.HistoryHandler.previousPage();
 
             // Load previous address into URL bar.
-            view.SetURLInput(this.HistoryHandler.previousPage());
-        }
+            view.SetURLInput(url);
 
-        /// <summary>
-        /// Handles the event triggered when a new URL is registered.
-        /// </summary>
-        /// <remarks>This method registers the given url to the history handler and re-loads the dropdown</remarks>
-        public void HistoryRegister() {
-
-            string url = view.GetUrlInput();
-
-            // Register the new URL in the history handler.
-            HistoryHandler.Register(url);
-
-            // Update the history dropdowns as history log updated.
-            view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
+            // Load page as normal
+            LoadPage(url);
         }
 
         /// <summary>
@@ -171,8 +167,14 @@ namespace Web_Browser_CW1.Control.Coordinators {
             string url = view.GetUrlInput();
             Debug.WriteLine($"URL changed to: {url} \t Loading...");
 
-            // Load address into URL bar.
+            // Load address into URL bar
             view.SetURLInput(url);
+
+            // Register the new URL in the history handler.
+            HistoryHandler.Register(url);
+
+            // Update the history dropdowns as history log updated.
+            view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
 
             // Load the new URL.
             LoadPage(url);

@@ -41,12 +41,11 @@ namespace Web_Browser_CW1.Views {
 
         event EventHandler HistoryPreviousClick;
         event EventHandler HistoryNextClick;
-        event EventHandler HistoryRegister;
 
         event EventHandler<SelectedUrlArgs> HistoryDropDownClick;
         event EventHandler<SelectedUrlArgs> BookmarkDropDownClick;
 
-        event EventHandler UrlChanged;
+        event EventHandler UrlSubmit;
         event EventHandler<StateArgs> StateRequest;
 
         event EventHandler BookmarkClick;

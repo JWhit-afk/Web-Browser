@@ -55,14 +55,13 @@ namespace Web_Browser_CW1.Control {
         private void SubscribeEvents() {
 
             // Navigation Requests (History navigation, URL changes, dropdown requests etc) are deligated to the navigation coordinator.
-            view.HistoryRegister += (_, _) => coordinator.Navigation.HistoryRegister();
             view.HistoryNextClick += (_, _) => coordinator.Navigation.HistoryNext();
             view.HistoryPreviousClick += (_, _) => coordinator.Navigation.HistoryPrevious();
 
             view.HistoryDropDownClick += (_, e) => coordinator.Navigation.HistoryRequest(e);
             view.BookmarkDropDownClick += (_, e) => coordinator.Navigation.BookmarkRequest(e);
 
-            view.UrlChanged += (_, _) => coordinator.Navigation.NavigateFromURL();
+            view.UrlSubmit += (_, _) => coordinator.Navigation.NavigateFromURL();
 
             // Bookmarking Requests (Bookmark UI updates, e.g., anything not realated to navigation) are deligated to the bookmarking coordinator.
             view.BookmarkClick += (_, e) => coordinator.Bookmarker.BookmarkClick();

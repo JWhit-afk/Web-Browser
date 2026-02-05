@@ -26,7 +26,7 @@ namespace Web_Browser_CW1
         public event EventHandler<SelectedUrlArgs>? HistoryDropDownClick;
         public event EventHandler<SelectedUrlArgs>? BookmarkDropDownClick;
 
-        public event EventHandler? UrlChanged;
+        public event EventHandler? UrlSubmit;
         public event EventHandler<StateArgs>? StateRequest;
 
         public event EventHandler? BookmarkClick;
@@ -36,7 +36,6 @@ namespace Web_Browser_CW1
         /// Gets the string located in <see cref="urlBar"/>
         /// </summary>
         /// <returns>A possibly empty string</returns>
-
         public string GetUrlInput() {
             return this.urlBar.Text;
         }
@@ -205,14 +204,8 @@ namespace Web_Browser_CW1
         /// <param name="e">Default event args</param>
         private void ButtonHome_Click(object sender, EventArgs e) {
 
-            // Call the state request event to fetch home and load into url bar.
+            // Call the state request event to fetch home and load.
             this.StateRequest?.Invoke(sender, new StateArgs { request = StateArgs.Requests.homePageLoad });
-
-            // Record visit to history.
-            this.HistoryRegister?.Invoke(sender, e);
-
-            // Notify subscribers URL changed to load page.
-            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -223,11 +216,8 @@ namespace Web_Browser_CW1
         /// <param name="e">Default event args</param>
         private void ButtonPrev_Click(object sender, EventArgs e) {
 
-            // Call the history previous event to navigate back.
+            // Call the history previous event to navigate back and load.
             this.HistoryPreviousClick?.Invoke(sender, e);
-
-            // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -253,11 +243,8 @@ namespace Web_Browser_CW1
         /// <param name="e">Default event args.</param>
         private void ButtonSearch_Click(object sender, EventArgs e) {
 
-            // Update history with new url.
-            this.HistoryRegister?.Invoke(sender, e);
-
-            // Notify URL changed to load page.
-            this.UrlChanged?.Invoke(sender, e);
+            // Submit the URL to load the page and add to history.
+            this.UrlSubmit?.Invoke(sender, e);
         }
 
         /// <summary>
