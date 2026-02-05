@@ -38,13 +38,15 @@ namespace Web_Browser_CW1.Views {
 
         #region Event Handlers
         event EventHandler<UrlEvent> UrlChanged;
-        event EventHandler<UrlEvent> HistoryUpdate;
-        event EventHandler<UrlEvent> DropdownUrlClicked;
 
         event EventHandler<StateArgs> StateRequest;
 
         event EventHandler HistoryPreviousClick;
         event EventHandler HistoryNextClick;
+        event EventHandler<UrlEvent> HistoryRegister;
+
+        event EventHandler<UrlEvent> HistoryDropDownClick;
+        event EventHandler<UrlEvent>? BookmarkDropDownClick;
 
         event EventHandler<UrlEvent> BookmarkClick;
         #endregion

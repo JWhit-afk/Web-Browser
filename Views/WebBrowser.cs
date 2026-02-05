@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Windows.Forms;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
@@ -18,22 +19,25 @@ namespace Web_Browser_CW1
             this.StateRequest?.Invoke(this, new StateArgs { request = StateArgs.Requests.save });
         }
 
-        #region IView Implementation
+        #region IView Implementation (GUI Updates)
 
         public event EventHandler? HistoryPreviousClick;
         public event EventHandler? HistoryNextClick;
-        
-        public event EventHandler<UrlEvent>? DropdownUrlClicked;
+
+        public event EventHandler<UrlEvent>? HistoryDropDownClick;
+        public event EventHandler<UrlEvent>? BookmarkDropDownClick;
+
         public event EventHandler<UrlEvent>? UrlChanged;
-        public event EventHandler<UrlEvent>? HistoryUpdate;
+        public event EventHandler<UrlEvent>? HistoryRegister;
         public event EventHandler<StateArgs>? StateRequest;
 
         public event EventHandler<UrlEvent>? BookmarkClick;
 
+
         /// <summary>
         /// Updates the history dropdown with <paramref name="items"/>
         /// </summary>
-        /// <remarks>The new dropdown items, onclick will call <see cref="Dropdown_Click"/></remarks>
+        /// <remarks>The new dropdown items, onclick will call <see cref="HistoryDropDown_Click"/></remarks>
         /// <param name="items">The URLs to display</param>
         public void UpdateHistoryDropDown(List<string> items) {
 
@@ -48,7 +52,7 @@ namespace Web_Browser_CW1
                 var urlItem = new ToolStripMenuItem(item);
 
                 // Asign onclick event
-                urlItem.Click += new EventHandler(Dropdown_Click); ;
+                urlItem.Click += new EventHandler(HistoryDropDown_Click);
 
                 historyToolStripMenuItem.DropDownItems.Add(urlItem);
             }
@@ -152,7 +156,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Updates the bookmark dropdown with <paramref name="items"/>
         /// </summary>
-        /// <remarks>The new dropdown items, onclick will call <see cref="Dropdown_Click"/></remarks>
+        /// <remarks>The new dropdown items, onclick will call <see cref="BookmarkDropDown_Click"/></remarks>
         /// <param name="items">The URLs to display</param>
         public void UpdateBookmarks(List<string> items) {
 
@@ -166,7 +170,7 @@ namespace Web_Browser_CW1
                 var urlItem = new ToolStripMenuItem(items[i]);
 
                 // Asign onclick event
-                urlItem.Click += new EventHandler(Dropdown_Click);
+                urlItem.Click += new EventHandler(BookmarkDropDown_Click);
 
                 favouritesToolStripMenuItem.DropDownItems.Add(urlItem);
             }
@@ -198,7 +202,7 @@ namespace Web_Browser_CW1
             this.StateRequest?.Invoke(sender, new StateArgs { request = StateArgs.Requests.homePageLoad });
 
             // Record visit to history.
-            this.HistoryUpdate?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.HistoryRegister?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
 
             // Notify subscribers URL changed to load page.
             this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
@@ -243,7 +247,7 @@ namespace Web_Browser_CW1
         private void ButtonSearch_Click(object sender, EventArgs e) {
 
             // Update history with new url.
-            this.HistoryUpdate?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
+            this.HistoryRegister?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
 
             // Notify URL changed to load page.
             this.UrlChanged?.Invoke(sender, new UrlEvent { url = this.urlBar.Text });
@@ -255,13 +259,24 @@ namespace Web_Browser_CW1
         /// <remarks>Raises relevent events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
         /// <param name="sender">The dropdown control.</param>
         /// <param name="e">Default event args.</param>
-        private void Dropdown_Click(object? sender, EventArgs e) {
+        private void HistoryDropDown_Click(object? sender, EventArgs e) {
 
             if (sender != null )
                 Debug.WriteLine($"Sender: {sender.GetType()}");
 
             if (sender is ToolStripMenuItem { Text: not null } item) {
-                this.DropdownUrlClicked?.Invoke(sender, new UrlEvent { url = item.Text });
+
+                this.HistoryDropDownClick?.Invoke(sender, new UrlEvent { url = item.Text });
+            }
+        }
+
+        private void BookmarkDropDown_Click(object? sender, EventArgs e) {
+
+            if (sender != null)
+                Debug.WriteLine($"Sender: {sender.GetType()}");
+
+            if (sender is ToolStripMenuItem { Text: not null } item) {
+                this.BookmarkDropDownClick?.Invoke(sender, new UrlEvent { url = item.Text });
             }
         }
 
@@ -290,9 +305,9 @@ namespace Web_Browser_CW1
             if (e.KeyCode != Keys.Enter) return;
 
             // Request homepage change on state handler and pass homepage as arg.
-            this.StateRequest?.Invoke(this, 
+            this.StateRequest?.Invoke(this,
                 new StateArgs {
-                    request = StateArgs.Requests.homePageSet, 
+                    request = StateArgs.Requests.homePageSet,
                     homepage = this.newHomepageText.Text
                 }
             );
