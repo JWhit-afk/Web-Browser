@@ -2,3 +2,6 @@
 /bin
 /obj
 /release
+
+/BrowserTests/bin
+/BrowserTests/obj
