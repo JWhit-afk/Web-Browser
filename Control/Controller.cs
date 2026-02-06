@@ -15,7 +15,12 @@ namespace Web_Browser_CW1.Control {
 
         private Dictionary<StateArgs.Requests, Action<StateArgs>> _stateHandlers;
 
-        private readonly IView view;
+        private readonly IApplicationStateView applicationStateView;
+        private readonly IBookmarkView bookmarkView;
+        private readonly IHistoryView historyView;
+        private readonly INavigationView navigationView;
+        private readonly IPageView pageView;
+
         private readonly MainCoordinator coordinator;
 
         private readonly BookmarkHandler BookmarkHandler;
@@ -28,8 +33,10 @@ namespace Web_Browser_CW1.Control {
         /// <remarks>This constructor registers view events and loads the saved
         /// data (bookmarks, history and homepage). The view must be fully initialized before passing it to the
         /// controller.</remarks>
-        #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. line 50 initializes this field, but the compiler cannot infer that.
-        public Controller(IView view) {
+        #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. line 62 initializes this field, but the compiler cannot infer that.
+        public Controller(
+            WebBrowser app
+            ) {
 
             // Construct handlers (the model)
             BookmarkHandler = new();
@@ -37,8 +44,15 @@ namespace Web_Browser_CW1.Control {
             StateHandler = new();
 
             // Get app reference (Delegation service) and view (GUI Updates)
-            this.view = view;
-            this.coordinator = new(view, BookmarkHandler, HistoryHandler, StateHandler);
+            this.applicationStateView = app;
+            this.bookmarkView = app;
+            this.historyView = app;
+            this.navigationView = app;
+            this.pageView = app;
+
+            this.coordinator = new(
+                bookmarkView, historyView, navigationView, pageView,
+                BookmarkHandler, HistoryHandler, StateHandler);
 
             // Subscribe events and register handlers for state requests.
             this.SubscribeEvents();
@@ -55,16 +69,16 @@ namespace Web_Browser_CW1.Control {
         private void SubscribeEvents() {
 
             // Navigation Requests (History navigation, URL changes, drop-down requests etc) are delegated to the navigation coordinator.
-            view.HistoryNextClick += (_, _) => coordinator.Navigation.HistoryNext();
-            view.HistoryPreviousClick += (_, _) => coordinator.Navigation.HistoryPrevious();
+            navigationView.HistoryNextClick += (_, _) => coordinator.Navigation.HistoryNext();
+            navigationView.HistoryPreviousClick += (_, _) => coordinator.Navigation.HistoryPrevious();
 
-            view.HistoryDropDownClick += (_, e) => coordinator.Navigation.HistoryRequest(e);
-            view.BookmarkDropDownClick += (_, e) => coordinator.Navigation.BookmarkRequest(e);
+            historyView.HistoryDropDownClick += (_, e) => coordinator.Navigation.HistoryRequest(e);
+            bookmarkView.BookmarkDropDownClick += (_, e) => coordinator.Navigation.BookmarkRequest(e);
 
-            view.UrlSubmit += (_, _) => coordinator.Navigation.NavigateFromURL();
+            navigationView.UrlSubmit += (_, _) => coordinator.Navigation.NavigateFromURL();
 
             // Bookmarking Requests (Bookmark UI updates, e.g., anything not related to navigation) are delegated to the bookmarking coordinator.
-            view.BookmarkClick += (_, e) => coordinator.Bookmarker.BookmarkClick();
+            bookmarkView.BookmarkClick += (_, e) => coordinator.Bookmarker.BookmarkClick();
 
             // Session Requests (Anything that requires saving / loading) are handled internally by _stateHandlers which, in turn calls the session coordinator.
             _stateHandlers = new()
@@ -74,10 +88,10 @@ namespace Web_Browser_CW1.Control {
                 { StateArgs.Requests.save, _ => coordinator.Session.SaveSession() },
                 { StateArgs.Requests.load, _ => coordinator.Session.LoadSession() },
             };
-            view.StateRequest += (_, e) => View_StateRequest(e);
+            applicationStateView.StateRequest += (_, e) => View_StateRequest(e);
 
             // Register shortcut handle
-            view.ShortcutPressed += (_, e) => coordinator.Shortcuts.Handle(e);
+            applicationStateView.ShortcutPressed += (_, e) => coordinator.Shortcuts.Handle(e);
         }
 
         /// <summary>
