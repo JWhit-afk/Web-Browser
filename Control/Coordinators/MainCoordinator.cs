@@ -10,10 +10,6 @@ namespace Web_Browser_CW1.Control {
     /// <remarks>Acts as a coordinator factory. Sets up the others that will handle the delegation.</remarks>
     internal class MainCoordinator {
 
-        BookmarkHandler BookmarkHandler;
-        HistoryHandler HistoryHandler;
-        StateHandler StateHandler;
-
         public NavigationCoordinator Navigation { get; }
         public SessionCoordinator Session { get; }
 
@@ -22,8 +18,11 @@ namespace Web_Browser_CW1.Control {
         public ShortcutCoordinator Shortcuts { get;  }
 
         public MainCoordinator(
-                // Get view reference to pass to coordinators.
-                IView view,
+                // Get view references to pass to coordinators.
+                IBookmarkView bookmarkView,
+                IHistoryView historyView,
+                INavigationView navigationView,
+                IPageView pageView,
 
                 // Handlers for the coordinators to use, passed in from the control layer.
                 BookmarkHandler bookmarkHandler,
@@ -31,27 +30,28 @@ namespace Web_Browser_CW1.Control {
                 StateHandler stateHandler
             ) {
 
-            // Assign references to handlers for use in the coordinators.
-            this.BookmarkHandler = bookmarkHandler;
-            this.HistoryHandler = historyHandler;
-            this.StateHandler = stateHandler;
-
             // Initialise logic coordinators, passing in the handlers needed.
             this.Navigation = new NavigationCoordinator(
-                view,
-                HistoryHandler,
-                BookmarkHandler,
-                StateHandler
+                navigationView,
+                bookmarkView,
+                pageView,
+                historyView,
+
+                historyHandler,
+                bookmarkHandler,
+                stateHandler
             );
             this.Session = new SessionCoordinator(
-                BookmarkHandler,
-                HistoryHandler,
-                StateHandler
+                bookmarkHandler,
+                historyHandler,
+                stateHandler
             );
             this.Bookmarker = new BookmarkingCoordinator(
-                view,
-                BookmarkHandler,
-                StateHandler
+                bookmarkView,
+                navigationView,
+
+                bookmarkHandler,
+                stateHandler
             );
 
             // Special - shortcut coordinator uses other coordinators

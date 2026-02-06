@@ -3,7 +3,14 @@ using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1
 {
-    public partial class WebBrowser : Form, IView {
+    public partial class WebBrowser : 
+        Form,
+        IApplicationStateView,
+        IBookmarkView,
+        IHistoryView,
+        INavigationView,
+        IPageView
+        {
 
         public WebBrowser() {
 

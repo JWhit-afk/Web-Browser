@@ -1,6 +1,5 @@
 ﻿
 using System.Diagnostics;
-using System.Windows.Forms;
 using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Control.Coordinators {
@@ -13,10 +12,10 @@ namespace Web_Browser_CW1.Control.Coordinators {
 
         private readonly Dictionary<Keys, Action> _shortcutHandlers;
 
-        NavigationCoordinator Navigation;
-        BookmarkingCoordinator Bookmarker;
+        private readonly NavigationCoordinator Navigation;
+        private readonly BookmarkingCoordinator Bookmarker;
 
-        public ShortcutCoordinator(
+        public ShortcutCoordinator (
             NavigationCoordinator Navigation,
             BookmarkingCoordinator Bookmarker
             ) {

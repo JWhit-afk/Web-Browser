@@ -1,27 +1,23 @@
 ﻿
 using System.Diagnostics;
-using System.Security.Policy;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Control.Coordinators {
 
-    internal class BookmarkingCoordinator {
-
-        IView view;
-        BookmarkHandler BookmarkHandler;
-        StateHandler StateHandler;
-
-        public BookmarkingCoordinator(
-            IView view,
+    internal class BookmarkingCoordinator
+        (
+            IBookmarkView bookmarkView,
+            INavigationView navigationView,
             BookmarkHandler BookmarkHandler,
             StateHandler StateHandler
-            ) {
+         ) {
 
-            this.view = view;
-            this.BookmarkHandler = BookmarkHandler;
-            this.StateHandler = StateHandler;
-        }
+        private readonly IBookmarkView bookmarkView = bookmarkView;
+        private readonly INavigationView navigationView = navigationView;
+
+        private readonly BookmarkHandler BookmarkHandler = BookmarkHandler;
+        private readonly StateHandler StateHandler = StateHandler;
 
         /// <summary>
         /// Handles the loading of the bookmark UI by retrieving the current list of bookmarks from the BookmarkHandler.
@@ -29,10 +25,10 @@ namespace Web_Browser_CW1.Control.Coordinators {
         public void LoadBookmarkUI() {
 
             // Get bookmarks from handler and update the view.
-            view.UpdateBookmarks(BookmarkHandler.GetBookmarks());
+            bookmarkView.UpdateBookmarks(BookmarkHandler.GetBookmarks());
 
             // Determine if the homepage is bookmarked and update the bookmark button on the view accordingly.
-            view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(StateHandler.homePageUrl));
+            bookmarkView.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(StateHandler.homePageUrl));
         }
 
         /// <summary>
@@ -46,7 +42,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         public void BookmarkClick() {
 
             Debug.WriteLine($"Bookmark button clicked for URL");
-            string url = view.GetUrlInput();
+            string url = navigationView.GetUrlInput();
 
             // Toggle bookmark status for the given URL.
             if (BookmarkHandler.IsBookmarked(url)) {
@@ -60,10 +56,10 @@ namespace Web_Browser_CW1.Control.Coordinators {
             }
 
             // Update bookmark list on view.
-            view.UpdateBookmarks(BookmarkHandler.GetBookmarks());
+            bookmarkView.UpdateBookmarks(BookmarkHandler.GetBookmarks());
 
             // Update button on view to reflect new status.
-            view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
+            bookmarkView.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
         }
     }
 }

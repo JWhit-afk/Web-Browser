@@ -9,28 +9,26 @@ namespace Web_Browser_CW1.Control.Coordinators {
     /// Coordinates navigation-related interactions between the view and the underlying handlers, 
     /// managing page loading, history navigation, and bookmark status updates.
     /// </summary>
-    internal class NavigationCoordinator {
+    internal class NavigationCoordinator
+        (
+            INavigationView navigationView,
+            IBookmarkView bookmarkView,
+            IPageView pageView,
+            IHistoryView historyView,
 
-        IView view;
-        HistoryHandler HistoryHandler;
-        BookmarkHandler BookmarkHandler;
-        StateHandler StateHandler;
-
-        public NavigationCoordinator(
-            IView view,
             HistoryHandler historyHandler,
             BookmarkHandler bookmarkHandler,
             StateHandler stateHandler
-            ) {
+        ) {
 
-            // Get view reference.
-            this.view = view;
+        private readonly INavigationView navigationView = navigationView;
+        private readonly IBookmarkView bookmarkView = bookmarkView;
+        private readonly IPageView pageView = pageView;
+        private readonly IHistoryView historyView = historyView;
 
-            // Assign references to handlers for use in the coordinator.
-            this.HistoryHandler = historyHandler;
-            this.BookmarkHandler = bookmarkHandler;
-            this.StateHandler = stateHandler;
-        }
+        private readonly HistoryHandler HistoryHandler = historyHandler;
+        private readonly BookmarkHandler BookmarkHandler = bookmarkHandler;
+        private readonly StateHandler StateHandler = stateHandler;
 
         #region HTML Requests
         /// <summary>
@@ -46,26 +44,26 @@ namespace Web_Browser_CW1.Control.Coordinators {
         private async void LoadPage(string url) {
 
             // Update bookmark icon if the new url is bookmarked or not
-            view.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
+            bookmarkView.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
 
             // Show progress bar
-            view.ToggleProgressIndicator(true);
+            pageView.ToggleProgressIndicator(true);
 
             // Load the url from the url bar text input.
             HttpResponse response = await HTTPClient.Get(url);
 
             // Update the HTML Outputs
-            view.UpdateHTMLOutput(response.body);
-            view.UpdateStatusCodeOutput($"Status Code: {(int)response.statusCode} - {response.statusCode.ToString()}");
-            view.UpdateTitleOutput(response.title);
+            pageView.UpdateHTMLOutput(response.body);
+            pageView.UpdateStatusCodeOutput($"Status Code: {(int)response.statusCode} - {response.statusCode}");
+            pageView.UpdateTitleOutput(response.title);
 
-            if (response.favicon != null) view.UpdateFaviconOutput(response.favicon);
+            if (response.favicon != null) pageView.UpdateFaviconOutput(response.favicon);
 
             // Ensure forward and back buttons are correctly enabled/disabled.
-            view.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
+            navigationView.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
 
             // Hide Progress indicator
-            view.ToggleProgressIndicator(false);
+            pageView.ToggleProgressIndicator(false);
         }
 
         /// <summary>
@@ -77,7 +75,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         public void LoadHomepage() {
 
             // Load homepage into url bar
-            view.SetURLInput(StateHandler.homePageUrl);
+            navigationView.SetURLInput(StateHandler.homePageUrl);
 
             // Load page as normal
             LoadPage(StateHandler.homePageUrl);
@@ -86,10 +84,10 @@ namespace Web_Browser_CW1.Control.Coordinators {
             HistoryHandler.Register(StateHandler.homePageUrl);
 
             // Ensure buttons are correctly enabled/disabled based on the updated history.
-            view.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
+            navigationView.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
 
             // Update the history drop-downs as history log updated.
-            view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
+            historyView.UpdateHistoryDropDown(HistoryHandler.GetHistory());
         }
         #endregion
 
@@ -112,7 +110,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
             var url = this.HistoryHandler.nextPage();
 
             // Load next address into URL bar.
-            view.SetURLInput(url);
+            navigationView.SetURLInput(url);
 
             // Load page as normal.
             LoadPage(url);
@@ -135,7 +133,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
             var url = this.HistoryHandler.previousPage();
 
             // Load previous address into URL bar.
-            view.SetURLInput(url);
+            navigationView.SetURLInput(url);
 
             // Load page as normal
             LoadPage(url);
@@ -149,7 +147,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
         public void HistoryRequest(SelectedUrlArgs e) {
 
             // Load url into url bar
-            this.view.SetURLInput(e.url);
+            this.navigationView.SetURLInput(e.url);
 
             // Load the page as normal
             LoadPage(e.url);
@@ -169,7 +167,7 @@ namespace Web_Browser_CW1.Control.Coordinators {
             Debug.WriteLine($"Bookmark request for {e.url}");
 
             // Load url into url bar
-            this.view.SetURLInput(e.url);
+            this.navigationView.SetURLInput(e.url);
 
             // Load the page as normal
             LoadPage(e.url);
@@ -181,17 +179,17 @@ namespace Web_Browser_CW1.Control.Coordinators {
         /// </summary>
         public void NavigateFromURL() {
 
-            string url = view.GetUrlInput();
+            string url = navigationView.GetUrlInput();
             Debug.WriteLine($"URL changed to: {url} \t Loading...");
 
             // Load address into URL bar
-            view.SetURLInput(url);
+            navigationView.SetURLInput(url);
 
             // Register the new URL in the history handler.
             HistoryHandler.Register(url);
 
-            // Update the history dropdowns as history log updated.
-            view.UpdateHistoryDropDown(HistoryHandler.GetHistory());
+            // Update the history drop-downs as history log updated.
+            historyView.UpdateHistoryDropDown(HistoryHandler.GetHistory());
 
             // Load the new URL.
             LoadPage(url);

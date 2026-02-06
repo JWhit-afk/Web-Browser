@@ -1,6 +1,5 @@
 ﻿
 using Web_Browser_CW1.Handlers;
-using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Control.Coordinators {
 
@@ -8,21 +7,16 @@ namespace Web_Browser_CW1.Control.Coordinators {
     /// Coordinates the loading and saving of the session, which includes bookmarks, history, and state. 
     /// It acts as a central point for managing the session data and ensuring that all components are synchronized when loading or saving the session.
     /// </summary>
-    internal class SessionCoordinator {
-
-        BookmarkHandler BookmarkHandler;
-        HistoryHandler HistoryHandler;
-        StateHandler StateHandler;
-
-        public SessionCoordinator(
+    internal class SessionCoordinator
+        (
             BookmarkHandler BookmarkHandler,
-            HistoryHandler HistoryHandler, 
-            StateHandler StateHandler) 
-            {
-            this.BookmarkHandler = BookmarkHandler;
-            this.HistoryHandler = HistoryHandler;
-            this.StateHandler = StateHandler;
-        }
+            HistoryHandler HistoryHandler,
+            StateHandler StateHandler
+        ) {
+
+        private readonly BookmarkHandler BookmarkHandler = BookmarkHandler;
+        private readonly HistoryHandler HistoryHandler = HistoryHandler;
+        private readonly StateHandler StateHandler = StateHandler;
 
         /// <summary>
         /// Sets the homepage URL in the StateHandler, which is responsible for managing the state of the browser. 
