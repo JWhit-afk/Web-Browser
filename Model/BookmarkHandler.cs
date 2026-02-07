@@ -40,7 +40,7 @@ namespace Web_Browser_CW1.Handlers {
     /// </summary>
     /// <remarks>Provides services for maintaining the state of the application by saving and loading 
     /// the bookmarks.</remarks>
-    internal class BookmarkHandler {
+    public class BookmarkHandler {
 
         private const string bookmarkFilePath = AppConstants.DataFilePath + "/bookmarks.json";
 
@@ -98,8 +98,9 @@ namespace Web_Browser_CW1.Handlers {
             return bookmarks;
         }
 
+        #region Saving and loading
         /// <summary>
-        /// Loads bookmarks from a previous instance of the application.
+        /// Loads bookmarks from a previous instance of the application, at the default location.
         /// </summary>
         public void LoadBookmarks() {
 
@@ -117,7 +118,22 @@ namespace Web_Browser_CW1.Handlers {
 
                 File.Create(bookmarkFilePath).Close();
             }
+        }
 
+        /// <summary>
+        /// Loads the bookmarks from a previous instance of the application at the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path to load the data from.</param>
+        /// <exception cref="FileNotFoundException">Thrown when the specified file path does not exist.</exception>
+        public void LoadBookmarks(string filePath) {
+            string json = File.ReadAllText(filePath);
+
+            if (json == "") return;
+            List<string>? previousBookmarks = JsonSerializer.Deserialize<List<string>>(json);
+
+            if (previousBookmarks != null) {
+                bookmarks = previousBookmarks;
+            }
         }
 
         /// <summary>
@@ -130,5 +146,18 @@ namespace Web_Browser_CW1.Handlers {
             Debug.WriteLine("Bookmarks Saved:");
             Debug.WriteLine(json);
         }
+
+        /// <summary>
+        /// Saves the current collection of bookmarks to persistent storage at the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path to save the data to.</param>
+        public void SaveBookmarks(string filePath) {
+            Debug.WriteLine("Saving Bookmarks...");
+            string json = JsonSerializer.Serialize<List<string>>(bookmarks);
+            File.WriteAllText(filePath, json);
+            Debug.WriteLine("Bookmarks Saved:");
+            Debug.WriteLine(json);
+        }
+        #endregion
     }
 }

@@ -5,6 +5,7 @@ namespace Web_Browser_CW1
 
     // Application constants.
     public static class AppConstants {
+        public const string TestDataFilePath = "C:/Users/Jacob/Desktop/data/test_data";
         public const string DataFilePath = "C:/Users/Jacob/Desktop/data";
     }
 

@@ -13,6 +13,13 @@
     <Folder Include="Resources\" />
   </ItemGroup>
 
+ <ItemGroup>
+   <Content Remove="BrowserTests\**" />
+   <Compile Remove="BrowserTests\**" />
+   <EmbeddedResource Remove="BrowserTests\**" />
+   <None Remove="BrowserTests\**" />
+ </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
