@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Web_Browser_CW1.Handlers {
 
-internal class HistoryHandler {
+public class HistoryHandler {
 
         #region Exceptions
         /// <summary>
@@ -90,7 +90,30 @@ internal class HistoryHandler {
         }
 
         /// <summary>
-        /// Saves the current collection of bookmarks to persistent storage.
+        /// Loads the history from a previous application instance at the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path to load the data from.</param>
+        public void LoadHistory(string filePath) {
+
+            try {
+                string json = File.ReadAllText(filePath);
+
+                if (json == "") return;
+                List<string>? previousHistory = JsonSerializer.Deserialize<List<string>>(json);
+
+                if (previousHistory != null) {
+                    history = previousHistory;
+                    pointer = history.Count - 1;
+                }
+
+            } catch (FileNotFoundException) {
+                
+                File.Create(filePath).Close();
+            }
+        }
+
+        /// <summary>
+        /// Saves the current collection of history to persistent storage.
         /// </summary>
         public void SaveHistory() {
 
@@ -100,6 +123,18 @@ internal class HistoryHandler {
             Debug.WriteLine("History Saved:");
             Debug.WriteLine(json);
 
+        }
+
+        /// <summary>
+        /// Saves the current collection of history to persistent storage at the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path to save the data to.</param>
+        public void SaveHistory(string filePath) {
+            Debug.WriteLine("Saving History...");
+            string json = JsonSerializer.Serialize<List<string>>(history);
+            File.WriteAllText(filePath, json);
+            Debug.WriteLine("History Saved:");
+            Debug.WriteLine(json);
         }
 
         /// <summary>
@@ -121,14 +156,17 @@ internal class HistoryHandler {
         /// <summary>
         /// Returns the zero-based index of the specified URL within the browsing history.
         /// </summary>
-        /// <remarks>If multiple entries match the specified URL, the index of the first occurrence is
+        /// <remarks>If multiple entries match the specified URL, the index of the most recent entry is
         /// returned. The comparison is case-sensitive.</remarks>
         /// <param name="url">The URL to locate in the browsing history. Cannot be null.</param>
         /// <returns>The zero-based index of the URL if found; otherwise, –1.</returns>
         public int FindUrl(string url) {
-            return history.FindIndex((string u) => {
-                return u == url;
-            });
+            for (int i=pointer; i >= 0; i--) {
+                if (history[i] == url) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         /// <summary>
