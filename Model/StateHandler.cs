@@ -9,7 +9,7 @@ namespace Web_Browser_CW1.Handlers {
     /// </summary>
     internal class StateHandler {
 
-        private const string StateFilePath = AppConstants.DataFilePath + "/config.json";
+        private static readonly string StateFilePath = AppConstants.DataFilePath + "/config.json";
         private const string DefaultHome = "https://www.google.co.uk";
 
         public string homePageUrl { get; set; }
