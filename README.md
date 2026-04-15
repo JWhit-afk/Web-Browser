@@ -3,14 +3,14 @@
 ## Overview 📚
 This Web Browser application is a simple implementation of a windows
 forms application, built using C#. It follows the 
-Model-View-Controller (MVC) design pattern to separate concerns 
-and improve maintainability. The application includes features 
+Model-View-Presenter (MVP) design pattern to separate concerns,
+improve maintainability, and testability. The application includes features 
 such as bookmarking, history management, HTTP requests handling, 
 and session management.
 
 ## Why 🤔
 Developed as a learning project to understand the
-MVC design pattern and to gain experience in building a desktop
+MVP design pattern and to gain experience in building a desktop
 application in C#. The application serves as a basic web browser, 
 allowing users to navigate the web, manage bookmarks and history, 
 and handle HTTP requests.
@@ -20,44 +20,44 @@ and handle HTTP requests.
 - **History Management**: The application keeps track of the user's browsing history, allowing them to revisit previously visited sites.
 - **HTTP Requests Handling**: The application can send HTTP requests to fetch web pages and display the HTML to the user.
 - **Session Management**: The application can manage user sessions, allowing users to save their browsing state and restore it later.
-- **MVC Design Pattern**: The application is structured using the MVC design pattern, which promotes separation of concerns and improves maintainability.
+- **MVP Design Pattern**: The application is structured using the MVP design pattern, which promotes separation of concerns and improves maintainability.
 
 ### Directory Structure 🏗️
 
 The structure of the Web Browser application adheres to the 
-Model-View-Controller (MVC) design pattern. 
+Model-View-Controller (MVP) design pattern. 
 
 ```bash
 .
-├── Control/ (MVC Control)
-│   ├── Coordinators/ (UI Coordinators)
-│   │   ├── BookmarkingCoordinator.cs
-│   │   ├── MainCoordinator.cs
-│   │   ├── NavigationCoordinator.cs
-│   │   ├── SessionCoordinator.cs
-│   │   └── ShortcutCoordinator.cs
-│   └── Controller.cs
-├── Model/ (MVC Model)
+├── Model/
 │   ├── BookmarkHandler.cs
 │   ├── HistoryHandler.cs
 │   ├── HTTPClient.cs
 │   └── StateHandler.cs
-├── release
+├── Presenter/
+│   ├── SubPresenter/
+│   │   ├── BookmarkingPresenter.cs
+│   │   ├── NavigationPresenter.cs
+│   │   ├── SessionPresenter.cs
+│   │   └── ShortcutPresenter.cs
+│   ├── AppBootstrapper.cs
+│   ├── BrowserFacade.cs
+│   └── BrowserPresenter.cs
 ├── Resources/
 │   └── ...
-├── Views/ (MVC View)
-│   ├── IViews/ (UI Interface)
+├── Views/
+│   ├── IViews/
 │   │   ├── IApplicationStateView.cs
 │   │   ├── IBookmarkView.cs
 │   │   ├── IHistoryView.cs
 │   │   ├── INavigationView.cs
 │   │   └── IPageView.cs
-│   ├── WebBrowser.cs (View Implementation)
-│   └── WebEventArgs.cs (Custom Event Args)
+│   ├── WebBrowser.cs
+│   └── WebEventArgs.cs
 └── Program.cs
 ```
 
-🎮 Control: Contains the controllers that manage the flow of the 
+🎮 Presenter: Contains the presenter layer that manage the flow of the 
 application and handle user interactions. Ie., interacts with 
 business logic handlers and coordinates the UI updates based 
 on user actions.
