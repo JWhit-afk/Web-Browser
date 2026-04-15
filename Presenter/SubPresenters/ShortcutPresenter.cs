@@ -1,12 +1,11 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Web_Browser_CW1.Views;
 
 namespace Web_Browser_CW1.Presenter.SubPresenters {
 
     /// <summary>
-    /// Coordinates keyboard shortcuts and delegates actions to the appropriate coordinators (e.g., NavigationCoordinator, BookmarkingCoordinator).
-    /// Acting as if they had been registered as event handlers for the relevant events.
+    /// Handles keyboard shortcuts and delegates actions to feature presenters
+    /// (e.g., <see cref="NavigationPresenter"/> and <see cref="BookmarkingPresenter"/>).
     /// </summary>
     internal class ShortcutPresenter {
 
@@ -36,8 +35,8 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         }
 
         /// <summary>
-        /// Calls the appropriate action based on the keys pressed, as defined in <see cref="_shortcutHandlers"/>. 
-        /// If a matching shortcut is found, it marks the event as handled to prevent further propagation.
+        /// Executes the mapped shortcut action from <see cref="_shortcutHandlers"/>.
+        /// If a matching shortcut is found, marks the event as handled.
         /// </summary>
         /// <param name="e">The event arguments containing the key(s) pressed and a callback to designate 
         /// if the combination has been handled internally to prevent propagation of already handled shortcuts.</param>
