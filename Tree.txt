@@ -1,18 +1,18 @@
 ﻿.
-├── Control/
-│   ├── Coordinators/
-│   │   ├── BookmarkingCoordinator.cs
-│   │   ├── MainCoordinator.cs
-│   │   ├── NavigationCoordinator.cs
-│   │   ├── SessionCoordinator.cs
-│   │   └── ShortcutCoordinator.cs
-│   └── Controller.cs
 ├── Model/
 │   ├── BookmarkHandler.cs
 │   ├── HistoryHandler.cs
 │   ├── HTTPClient.cs
 │   └── StateHandler.cs
-├── release
+├── Presenter/
+│   ├── SubPresenter/
+│   │   ├── BookmarkingPresenter.cs
+│   │   ├── NavigationPresenter.cs
+│   │   ├── SessionPresenter.cs
+│   │   └── ShortcutPresenter.cs
+│   ├── AppBootstrapper.cs
+│   ├── BrowserFacade.cs
+│   └── BrowserPresenter.cs
 ├── Resources/
 │   └── ...
 ├── Views/
