@@ -3,13 +3,13 @@ using System.Diagnostics;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
-namespace Web_Browser_CW1.Control.Coordinators {
+namespace Web_Browser_CW1.Presenter.SubPresenters {
 
     /// <summary>
     /// Coordinates navigation-related interactions between the view and the underlying handlers, 
     /// managing page loading, history navigation, and bookmark status updates.
     /// </summary>
-    internal class NavigationCoordinator
+    internal class NavigationPresenter
         (
             INavigationView navigationView,
             IBookmarkView bookmarkView,

@@ -1,37 +1,35 @@
-﻿using Web_Browser_CW1.Control.Coordinators;
+﻿using Web_Browser_CW1.Presenter.SubPresenters;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
-namespace Web_Browser_CW1.Control {
+namespace Web_Browser_CW1.Presenter {
 
     /// <summary>
-    /// Delegates tasks to the relevant coordinators, such as navigation and session management.
+    /// Facade over feature presenters (navigation, session, bookmarks, and shortcuts).
     /// </summary>
-    /// <remarks>Acts as a coordinator factory. Sets up the others that will handle the delegation.</remarks>
-    internal class MainCoordinator {
+    /// <remarks>Builds and exposes sub-presenters used by the root presenter.</remarks>
+    internal class BrowserFacade {
 
-        public NavigationCoordinator Navigation { get; }
-        public SessionCoordinator Session { get; }
+        public NavigationPresenter Navigation { get; }
+        public SessionPresenter Session { get; }
+        public BookmarkingPresenter Bookmarker { get; }
+        public ShortcutPresenter Shortcuts { get;  }
 
-        public BookmarkingCoordinator Bookmarker { get; }
-
-        public ShortcutCoordinator Shortcuts { get;  }
-
-        public MainCoordinator(
-                // Get view references to pass to coordinators.
+        public BrowserFacade(
+                // Get view references to pass to presenters.
                 IBookmarkView bookmarkView,
                 IHistoryView historyView,
                 INavigationView navigationView,
                 IPageView pageView,
 
-                // Handlers for the coordinators to use, passed in from the control layer.
+                // Handlers for presenters to use, passed in from the presenter layer.
                 BookmarkHandler bookmarkHandler,
                 HistoryHandler historyHandler,
                 StateHandler stateHandler
             ) {
 
-            // Initialise logic coordinators, passing in the handlers needed.
-            this.Navigation = new NavigationCoordinator(
+            // Initialise feature presenters, passing in the handlers needed.
+            this.Navigation = new NavigationPresenter(
                 navigationView,
                 bookmarkView,
                 pageView,
@@ -41,12 +39,12 @@ namespace Web_Browser_CW1.Control {
                 bookmarkHandler,
                 stateHandler
             );
-            this.Session = new SessionCoordinator(
+            this.Session = new SessionPresenter(
                 bookmarkHandler,
                 historyHandler,
                 stateHandler
             );
-            this.Bookmarker = new BookmarkingCoordinator(
+            this.Bookmarker = new BookmarkingPresenter(
                 bookmarkView,
                 navigationView,
 
@@ -54,8 +52,8 @@ namespace Web_Browser_CW1.Control {
                 stateHandler
             );
 
-            // Special - shortcut coordinator uses other coordinators
-            this.Shortcuts = new ShortcutCoordinator(
+            // Special - shortcut presenter uses other presenters
+            this.Shortcuts = new ShortcutPresenter(
                 Navigation,
                 Bookmarker
             );

@@ -206,7 +206,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the home button click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args</param>
         private void ButtonHome_Click(object sender, EventArgs e) {
@@ -218,7 +218,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the previous page button click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args</param>
         private void ButtonPrev_Click(object sender, EventArgs e) {
@@ -230,7 +230,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the next page button click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void ButtonNext_Click(object sender, EventArgs e) {
@@ -242,7 +242,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the search button click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void ButtonSearch_Click(object sender, EventArgs e) {
@@ -254,7 +254,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for URL drop-down item click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The drop-down control.</param>
         /// <param name="e">Default event args.</param>
         private void HistoryDropDown_Click(object? sender, EventArgs e) {
@@ -271,7 +271,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for bookmark drop-down item click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The drop-down control.</param>
         /// <param name="e">Default event args.</param>
         private void BookmarkDropDown_Click(object? sender, EventArgs e) {
@@ -287,7 +287,7 @@ namespace Web_Browser_CW1
         /// <summary>
         /// Event handler for the bookmark button click event.
         /// </summary>
-        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Control.Controller"/> to handle</remarks>
+        /// <remarks>Raises relevant events for the <see cref="Web_Browser_CW1.Presenter.BrowserPresenter"/> to handle</remarks>
         /// <param name="sender">The button control.</param>
         /// <param name="e">Default event args.</param>
         private void Bookmark_Click(object sender, EventArgs e) {

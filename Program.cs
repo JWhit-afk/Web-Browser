@@ -1,12 +1,14 @@
-using Web_Browser_CW1.Control;
+using Web_Browser_CW1.Presenter;
 
 namespace Web_Browser_CW1
 {
 
     // Application constants.
     public static class AppConstants {
-        public const string TestDataFilePath = "C:/Users/Jacob/Desktop/data/test_data";
-        public const string DataFilePath = "C:/Users/Jacob/Desktop/data";
+
+        private static readonly string ExecucationDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+        public static readonly string DataFilePath = Path.Combine(ExecucationDirectory, "data");
+        public static readonly string TestDataFilePath = Path.Combine(DataFilePath, "test_data");
     }
 
     internal static class Program
@@ -24,9 +26,11 @@ namespace Web_Browser_CW1
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
+            // Create the main application form and initialize the application.
             var app = new WebBrowser();
-            var controller = new Controller(app);
+            AppBootstrapper.Initialise(app);
 
+            // Run the application.
             Application.Run(app);
         }
     }

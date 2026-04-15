@@ -3,9 +3,9 @@ using System.Diagnostics;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
 
-namespace Web_Browser_CW1.Control.Coordinators {
+namespace Web_Browser_CW1.Presenter.SubPresenters {
 
-    internal class BookmarkingCoordinator
+    internal class BookmarkingPresenter
         (
             IBookmarkView bookmarkView,
             INavigationView navigationView,

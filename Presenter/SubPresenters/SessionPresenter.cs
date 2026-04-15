@@ -1,13 +1,13 @@
 ﻿
 using Web_Browser_CW1.Handlers;
 
-namespace Web_Browser_CW1.Control.Coordinators {
+namespace Web_Browser_CW1.Presenter.SubPresenters {
 
     /// <summary>
     /// Coordinates the loading and saving of the session, which includes bookmarks, history, and state. 
     /// It acts as a central point for managing the session data and ensuring that all components are synchronized when loading or saving the session.
     /// </summary>
-    internal class SessionCoordinator
+    internal class SessionPresenter
         (
             BookmarkHandler BookmarkHandler,
             HistoryHandler HistoryHandler,
