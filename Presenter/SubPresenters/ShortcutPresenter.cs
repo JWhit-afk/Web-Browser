@@ -2,22 +2,22 @@
 using System.Diagnostics;
 using Web_Browser_CW1.Views;
 
-namespace Web_Browser_CW1.Control.Coordinators {
+namespace Web_Browser_CW1.Presenter.SubPresenters {
 
     /// <summary>
     /// Coordinates keyboard shortcuts and delegates actions to the appropriate coordinators (e.g., NavigationCoordinator, BookmarkingCoordinator).
     /// Acting as if they had been registered as event handlers for the relevant events.
     /// </summary>
-    internal class ShortcutCoordinator {
+    internal class ShortcutPresenter {
 
         private readonly Dictionary<Keys, Action> _shortcutHandlers;
 
-        private readonly NavigationCoordinator Navigation;
-        private readonly BookmarkingCoordinator Bookmarker;
+        private readonly NavigationPresenter Navigation;
+        private readonly BookmarkingPresenter Bookmarker;
 
-        public ShortcutCoordinator (
-            NavigationCoordinator Navigation,
-            BookmarkingCoordinator Bookmarker
+        public ShortcutPresenter (
+            NavigationPresenter Navigation,
+            BookmarkingPresenter Bookmarker
             ) {
 
             this.Navigation = Navigation;

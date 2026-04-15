@@ -1,4 +1,4 @@
-using Web_Browser_CW1.Control;
+using Web_Browser_CW1.Presenter;
 
 namespace Web_Browser_CW1
 {
