@@ -13,7 +13,7 @@ namespace Web_Browser_CW1 {
     /// The <see cref="statusCode"/> field indicates the HTTP status of the response,<br/>
     /// and <see cref="body"/> contains the raw response content. <br/>
     /// </remarks>
-    struct HttpResponse {
+    public struct HttpResponse {
 
         public string title;
         public Bitmap? favicon;
@@ -39,11 +39,13 @@ namespace Web_Browser_CW1 {
     /// Provides functionality to perform HTTP GET requests and retrieve web page information, including the page title,
     /// response body, status code, and favicon.
     /// </summary>
-    internal class HTTPClient {
+    public class HTTPClient {
 
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClientHandler handler = new HttpClientHandler {
+            AllowAutoRedirect = false // prevents 301, 302 from being followed.
+        };
 
-        public HTTPClient() {}
+        private static readonly HttpClient client = new HttpClient(handler);
 
         /// <summary>
         /// Sends an asynchronous HTTP GET request to the specified URL and retrieves the response, including the page

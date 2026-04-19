@@ -5,7 +5,7 @@ using static Web_Browser_CW1.Handlers.HistoryHandler;
 
 namespace BrowserTests.ModelTests {
 
-    [TestClass]
+    [TestClass, DoNotParallelize]
     public sealed class HistoryHandlerTests {
 
         //
@@ -32,14 +32,16 @@ namespace BrowserTests.ModelTests {
 
         private HistoryHandler HistoryHandler;
 
-        private const string SaveTestDirectory = AppConstants.TestDataFilePath + "/SaveHistory.json";
-        private const string LoadTestDirectory = AppConstants.TestDataFilePath + "/LoadHistory.json";
+        private static readonly string SaveTestDirectory = AppConstants.TestDataFilePath + "/SaveHistory.json";
+        private static readonly string LoadTestDirectory = AppConstants.TestDataFilePath + "/LoadHistory.json";
+
+        public HistoryHandlerTests() {
+            HistoryHandler = new();
+        }
 
         #region Test Setup and Tear-down
         [TestInitialize]
         public void SetUp() {
-
-            HistoryHandler = new();
 
             // Ensure test directory exist.
             Directory.CreateDirectory(AppConstants.TestDataFilePath);
