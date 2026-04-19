@@ -42,7 +42,7 @@ namespace Web_Browser_CW1.Handlers {
     /// the bookmarks.</remarks>
     public class BookmarkHandler {
 
-        private const string bookmarkFilePath = AppConstants.DataFilePath + "/bookmarks.json";
+        private static readonly string bookmarkFilePath = AppConstants.DataFilePath + "/bookmarks.json";
 
         private int capacity { get; }
         private List<string> bookmarks = new();

@@ -19,7 +19,7 @@ public class HistoryHandler {
         }
         #endregion
 
-        private const string HistoryFilePath = AppConstants.DataFilePath + "/history.json";
+        private static readonly string HistoryFilePath = AppConstants.DataFilePath + "/history.json";
 
         private List<string> history = new List<string>();
         private int pointer = -1;

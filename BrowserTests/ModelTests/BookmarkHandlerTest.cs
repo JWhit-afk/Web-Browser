@@ -4,7 +4,7 @@ using Web_Browser_CW1.Handlers;
 
 namespace BrowserTests.ModelTests {
 
-    [TestClass]
+    [TestClass, DoNotParallelize]
     public sealed class BookmarkHandlerTest {
 
         // IMPLEMENTED:
@@ -33,14 +33,16 @@ namespace BrowserTests.ModelTests {
 
         private BookmarkHandler Bookmarker;
 
-        private const string SaveTestDirectory = AppConstants.TestDataFilePath + "/SaveBookmarks.json";
-        private const string LoadTestDirectory = AppConstants.TestDataFilePath + "/LoadBookmarks.json";
+        private static readonly string SaveTestDirectory = AppConstants.TestDataFilePath + "/SaveBookmarks.json";
+        private static readonly string LoadTestDirectory = AppConstants.TestDataFilePath + "/LoadBookmarks.json";
+
+        public BookmarkHandlerTest() {
+            Bookmarker = new();
+        }
 
         #region Test Setup and Tear-down
         [TestInitialize]
         public void SetUp() {
-
-            Bookmarker = new();
 
             // Ensure test directory exist.
             Directory.CreateDirectory(AppConstants.TestDataFilePath);
@@ -48,7 +50,8 @@ namespace BrowserTests.ModelTests {
 
         [TestCleanup]
         public void TearDown() {
-            //TODO: Delete test files if they exist.
+
+            // Delete test files if they exist.
             if (File.Exists(SaveTestDirectory))
                 File.Delete(SaveTestDirectory);
 
