@@ -194,7 +194,7 @@ namespace Web_Browser_CW1
         /// </summary>
         /// <param name="isBookmarked">Pass <see langword="true"/> for the bookmarked image; 
         /// otherwise, <see langword="false"/> for the non-bookmarked image.</param>
-        public void ToggleBookmarkButton(bool isBookmarked) {
+        public void UpdateBookmarkButton(bool isBookmarked) {
             this.favourite.BackgroundImage = isBookmarked ? Properties.Resources.star_full : Properties.Resources.star_empty;
         }
 

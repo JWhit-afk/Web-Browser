@@ -4,7 +4,7 @@ namespace Web_Browser_CW1.Views {
     /// <summary>
     /// Interface defining any navigation-related UI elements, such as the URL input field and history navigation buttons.
     /// </summary>
-    internal interface INavigationView {
+    public interface INavigationView {
 
         event EventHandler HistoryPreviousClick;
         event EventHandler HistoryNextClick;
