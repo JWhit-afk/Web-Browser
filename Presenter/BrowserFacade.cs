@@ -65,10 +65,9 @@ namespace Web_Browser_CW1.Presenter {
         public void Initialise() {
 
             Session.LoadSession();
-            Navigation.LoadHomepage();
-
-            // Update the bookmark UI to reflect any bookmarks loaded from previous sessions.
             Bookmarker.LoadBookmarkUI();
+
+            Navigation.LoadHomepage();
         }
 
     }

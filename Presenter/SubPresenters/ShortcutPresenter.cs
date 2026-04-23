@@ -25,12 +25,12 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
             // Register Shortcuts (e.g., Ctrl + S to save) are handled internally by _shortcutHandlers which, in turn calls the relevant coordinator.
             _shortcutHandlers = new()
             {
-                { Keys.Control | Keys.H,        () => Navigation.LoadHomepage() },      // Load homepage (Ctrl + H)
-                { Keys.Control | Keys.Right,    () => Navigation.HistoryNext() },       // History next (Ctrl + Right Arrow)
-                { Keys.Control | Keys.Left,     () => Navigation.HistoryPrevious() },   // History previous (Ctrl + Left Arrow)
-                { Keys.Enter,                   () => Navigation.NavigateFromURL() },   // URL change (Enter)
-                { Keys.F5,                      () => Navigation.NavigateFromURL() },   // URL change (F5)
-                { Keys.Control | Keys.B,        () => Bookmarker.BookmarkClick() }      // Bookmark/Unbookmark page (Ctrl + B)
+                { Keys.Control | Keys.H,     async () => await Navigation.LoadHomepage() },      // Load homepage (Ctrl + H)
+                { Keys.Control | Keys.Right, async () => await Navigation.HistoryNext() },       // History next (Ctrl + Right Arrow)
+                { Keys.Control | Keys.Left,  async () => await Navigation.HistoryPrevious() },   // History previous (Ctrl + Left Arrow)
+                { Keys.Enter,                async () => await Navigation.NavigateFromURL() },   // URL change (Enter)
+                { Keys.F5,                   async () => await Navigation.NavigateFromURL() },   // URL change (F5)
+                { Keys.Control | Keys.B,           () => Bookmarker.BookmarkClick() }            // Bookmark/Unbookmark page (Ctrl + B)
             };
         }
 

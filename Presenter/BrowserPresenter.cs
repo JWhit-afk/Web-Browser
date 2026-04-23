@@ -54,13 +54,13 @@ namespace Web_Browser_CW1.Presenter {
         private void SubscribeEvents() {
 
             // Navigation Requests (History navigation, URL changes, drop-down requests etc) are delegated to the navigation coordinator.
-            navigationView.HistoryNextClick += (_, _) => facade.Navigation.HistoryNext();
-            navigationView.HistoryPreviousClick += (_, _) => facade.Navigation.HistoryPrevious();
+            navigationView.HistoryNextClick += async (_, _) => await facade.Navigation.HistoryNext();
+            navigationView.HistoryPreviousClick += async (_, _) => await facade.Navigation.HistoryPrevious();
 
-            historyView.HistoryDropDownClick += (_, e) => facade.Navigation.HistoryRequest(e);
-            bookmarkView.BookmarkDropDownClick += (_, e) => facade.Navigation.BookmarkRequest(e);
+            historyView.HistoryDropDownClick += async (_, e) => await facade.Navigation.HistoryRequest(e);
+            bookmarkView.BookmarkDropDownClick += async (_, e) => await facade.Navigation.BookmarkRequest(e);
 
-            navigationView.UrlSubmit += (_, _) => facade.Navigation.NavigateFromURL();
+            navigationView.UrlSubmit += async (_, _) => await facade.Navigation.NavigateFromURL();
 
             // Bookmarking Requests (Bookmark UI updates, e.g., anything not related to navigation) are delegated to the bookmarking coordinator.
             bookmarkView.BookmarkClick += (_, e) => facade.Bookmarker.BookmarkClick();
@@ -68,7 +68,7 @@ namespace Web_Browser_CW1.Presenter {
             // Session Requests (Anything that requires saving / loading) are handled internally by _stateHandlers which, in turn calls the session coordinator.
             _stateHandlers = new()
             {
-                { StateArgs.Requests.homePageLoad, _ => facade.Navigation.LoadHomepage() },
+                { StateArgs.Requests.homePageLoad, async _ => await facade.Navigation.LoadHomepage() },
                 { StateArgs.Requests.homePageSet, e => facade.Session.SetHomepage(e.homepage) },
                 { StateArgs.Requests.save, _ => facade.Session.SaveSession() },
                 { StateArgs.Requests.load, _ => facade.Session.LoadSession() },

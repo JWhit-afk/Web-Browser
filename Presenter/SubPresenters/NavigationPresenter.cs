@@ -1,4 +1,3 @@
-﻿
 using System.Diagnostics;
 using Web_Browser_CW1.Handlers;
 using Web_Browser_CW1.Views;
@@ -41,7 +40,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         /// the page load completes.</remarks>
         /// <param name="url">The URL of the web page to load. Must be a valid, non-empty string representing an absolute or relative
         /// address.</param>
-        private async void LoadPage(string url) {
+        private async Task LoadPage(string url) {
 
             // Update bookmark icon if the new url is bookmarked or not
             bookmarkView.ToggleBookmarkButton(BookmarkHandler.IsBookmarked(url));
@@ -72,19 +71,16 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         /// <remarks> This method sets the URL input field to the homepage URL, 
         /// loads the homepage, and logs the visit in the history handler, updating the history drop-down accordingly.
         /// </remarks>
-        public void LoadHomepage() {
+        public async Task LoadHomepage() {
 
             // Load homepage into url bar
             navigationView.SetURLInput(StateHandler.homePageUrl);
 
             // Load page as normal
-            LoadPage(StateHandler.homePageUrl);
+            await LoadPage(StateHandler.homePageUrl);
 
             // Log the visit in history
             HistoryHandler.Register(StateHandler.homePageUrl);
-
-            // Ensure buttons are correctly enabled/disabled based on the updated history.
-            navigationView.RefreshHistoryButtons(HistoryHandler.GetHistory().Count, HistoryHandler.GetPosition());
 
             // Update the history drop-downs as history log updated.
             historyView.UpdateHistoryDropDown(HistoryHandler.GetHistory());
@@ -97,7 +93,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         /// </summary>
         /// <remarks>This method updates the URL input field to display the address of the next page in
         /// the history.</remarks>
-        public void HistoryNext() {
+        public async Task HistoryNext() {
 
             // Check possible to move in history
             var count = HistoryHandler.GetHistory().Count;
@@ -113,7 +109,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
             navigationView.SetURLInput(url);
 
             // Load page as normal.
-            LoadPage(url);
+            await LoadPage(url);
         }
 
         /// <summary>
@@ -121,7 +117,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         /// </summary>
         /// <remarks>This method updates the URL input field to display the address of the previous page
         /// in the history.</remarks>
-        public void HistoryPrevious() {
+        public async Task HistoryPrevious() {
 
             // Check possible to move in history
             if (HistoryHandler.GetHistory().Count == 0 || HistoryHandler.GetPosition() == 0) {
@@ -136,7 +132,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
             navigationView.SetURLInput(url);
 
             // Load page as normal
-            LoadPage(url);
+            await LoadPage(url);
         }
 
         /// <summary>
@@ -144,13 +140,13 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         /// corresponding page, and resetting the browsing history position to that URL.
         /// </summary>
         /// <param name="e">An event argument containing the URL requested from the user.</param>
-        public void HistoryRequest(SelectedUrlArgs e) {
+        public async Task HistoryRequest(SelectedUrlArgs e) {
 
             // Load url into url bar
             this.navigationView.SetURLInput(e.url);
 
             // Load the page as normal
-            LoadPage(e.url);
+            await LoadPage(e.url);
 
             // Reset history pointer.
             Debug.WriteLine($"Setting position to {HistoryHandler.FindUrl(e.url)}");
@@ -162,7 +158,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
         /// corresponding page.
         /// </summary>
         /// <param name="e">An event argument containing the URL requested from the user.</param>
-        public void BookmarkRequest(SelectedUrlArgs e) {
+        public async Task BookmarkRequest(SelectedUrlArgs e) {
 
             Debug.WriteLine($"Bookmark request for {e.url}");
 
@@ -170,14 +166,14 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
             this.navigationView.SetURLInput(e.url);
 
             // Load the page as normal
-            LoadPage(e.url);
+            await LoadPage(e.url);
 
         }
 
         /// <summary>
         /// Handles the event triggered when the view's URL changes, updating the URL input and loading the new page.
         /// </summary>
-        public void NavigateFromURL() {
+        public async Task NavigateFromURL() {
 
             string url = navigationView.GetUrlInput();
             Debug.WriteLine($"URL changed to: {url} \t Loading...");
@@ -192,7 +188,7 @@ namespace Web_Browser_CW1.Presenter.SubPresenters {
             historyView.UpdateHistoryDropDown(HistoryHandler.GetHistory());
 
             // Load the new URL.
-            LoadPage(url);
+            await LoadPage(url);
         }
 
 
